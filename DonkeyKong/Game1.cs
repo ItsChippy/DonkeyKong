@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace DonkeyKong
@@ -61,14 +62,16 @@ namespace DonkeyKong
             tileMap = new Tile[numOfRows, numOfCols];
             LoadMap(stringsFromTextFile, bridgeTileTexture, bridgeLadderTileTexture, emptyTileTexture, ladderTileTexture);
 
-            LoadPlayer(playerTexture);
+            LoadPlayer(playerTexture, Window.ClientBounds.Width);
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            var keys = Keyboard.GetState();
 
+            player.Move(keys, Window.ClientBounds.Width);
 
             base.Update(gameTime);
         }
@@ -118,10 +121,11 @@ namespace DonkeyKong
             }
         }
 
-        protected void LoadPlayer(Texture2D playerTexture)
+        protected void LoadPlayer(Texture2D playerTexture, int width)
         {
-            
-            playerStartingPos = new Vector2(Window.ClientBounds.Width / 2 - playerTexture.Width / 2);
+            Vector2 playerStartingPos;
+            int playerStartingHeight = 680;
+            playerStartingPos = new Vector2(width / 2 - playerTexture.Width / 2, playerStartingHeight);
             player = new Player(playerTexture, playerStartingPos);
         }
     }
