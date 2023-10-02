@@ -11,11 +11,14 @@ namespace DonkeyKong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        //player
+        Player player;
+        Vector2 playerStartingPos;
+
         //tiles and map (tile array)
         int numOfRows;
         int numOfCols;
         Tile[,] tileMap;
-        Vector2 tileStartingPos;
 
         public Game1()
         {
@@ -40,6 +43,7 @@ namespace DonkeyKong
             Texture2D bridgeLadderTileTexture = Content.Load<Texture2D>(@"bridgeLadder");
             Texture2D emptyTileTexture = Content.Load<Texture2D>(@"empty");
             Texture2D ladderTileTexture = Content.Load<Texture2D>(@"ladder");
+            Texture2D playerTexture = Content.Load<Texture2D>(@"supermariofront");
 
             //storing "map levels" to determine type of tile
             List<string> stringsFromTextFile = new List<string>();
@@ -51,11 +55,13 @@ namespace DonkeyKong
             }
             sr.Close();
 
+            //loads the map and all tiles
             numOfRows = stringsFromTextFile[0].Length;
             numOfCols = stringsFromTextFile.Count;
             tileMap = new Tile[numOfRows, numOfCols];
-            tileStartingPos = new Vector2(0, Window.ClientBounds.Height);
             LoadMap(stringsFromTextFile, bridgeTileTexture, bridgeLadderTileTexture, emptyTileTexture, ladderTileTexture);
+
+            LoadPlayer(playerTexture);
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,13 +77,14 @@ namespace DonkeyKong
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
-            for (int row = 0; row < tileMap.GetLength(0); row++)
+            for (int row = 0; row < numOfRows; row++)
             {
-                for (int col = 0; col < tileMap.GetLength(1); col++)
+                for (int col = 0; col < numOfCols; col++)
                 {
                     tileMap[row, col].Draw(_spriteBatch);
                 }
             }
+            player.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -86,11 +93,10 @@ namespace DonkeyKong
         {
             int tileWidth = bridgeTileTexture.Width;
             int tileHeight = bridgeTileTexture.Height;
-            Vector2 changedPosition = tileStartingPos;
 
-            for (int row = 0; row < tileMap.GetLength(0); row++) 
+            for (int row = 0; row < numOfRows; row++) 
             {
-                for (int col = 0; col < tileMap.GetLength(1); col++)
+                for (int col = 0; col < numOfCols; col++)
                 {
                     if (strings[col][row] == '-')
                     {
@@ -110,6 +116,13 @@ namespace DonkeyKong
                     }
                 }
             }
+        }
+
+        protected void LoadPlayer(Texture2D playerTexture)
+        {
+            
+            playerStartingPos = new Vector2(Window.ClientBounds.Width / 2 - playerTexture.Width / 2);
+            player = new Player(playerTexture, playerStartingPos);
         }
     }
 }

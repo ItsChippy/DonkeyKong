@@ -12,11 +12,20 @@ namespace DonkeyKong
     {
         public Texture2D texture;
         public Vector2 position;
+        public Rectangle rect;
 
         public BaseGameObject(Texture2D texture, Vector2 position)
         {
             this.texture = texture;
             this.position = position;
+
+            rect = new Rectangle((int) position.X, (int)position.Y, texture.Width, texture.Height);
+        }
+
+        public void UpdateRectanglePos()
+        {
+            rect.X = (int)position.X;
+            rect.Y = (int)position.Y;
         }
     }
 }
