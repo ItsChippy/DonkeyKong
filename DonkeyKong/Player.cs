@@ -63,7 +63,7 @@ namespace DonkeyKong
             direction = inputDirection;
             int tileWidth = 40;
             Vector2 newDestination = position + direction * tileWidth;
-            if (Game1.CheckIfEmpty(newDestination))
+            if (Game1.CheckIfEmpty(newDestination) && Game1.CheckIfLadder(position))
             {
                 destination = newDestination;
                 isMoving = true;

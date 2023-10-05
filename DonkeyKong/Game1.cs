@@ -72,6 +72,8 @@ namespace DonkeyKong
             var keys = Keyboard.GetState();
 
             player.Move(keys, gameTime, Window.ClientBounds.Width);
+            player.UpdateRectanglePos();
+            
             base.Update(gameTime);
         }
 

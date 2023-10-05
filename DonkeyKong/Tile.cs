@@ -8,14 +8,18 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
+    public enum TileState
+    {
+        Bridge,
+        BridgeLadder,
+        Empty,
+        Ladder
+    }
     public class Tile : BaseGameObject
     {
-        public bool isEmpty;
-        public bool isLadder;
-        public Tile(Texture2D texture, Vector2 position, bool isEmpty, bool isLadder) : base(texture, position)
+        public TileState thisTileState;
+        public Tile(Texture2D texture, Vector2 position) : base(texture, position)
         {
-            this.isEmpty = isEmpty;
-            this.isLadder = isLadder;
         }
 
         public void Draw(SpriteBatch spriteBatch)

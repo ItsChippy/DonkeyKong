@@ -30,26 +30,32 @@ namespace DonkeyKong
         {
             int tileWidth = bridgeTileTexture.Width;
             int tileHeight = bridgeTileTexture.Height;
+            Tile currentTile;
 
             for (int row = 0; row < numOfRows; row++)
             {
                 for (int col = 0; col < numOfCols; col++)
                 {
+                    currentTile = tileMap[row, col];
                     if (strings[col][row] == '-')
                     {
-                        tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col), true, false);
+                        tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        currentTile.thisTileState = TileState.Empty;
                     }
                     else if (strings[col][row] == 'X')
                     {
-                        tileMap[row, col] = new Tile(bridgeTileTexture, new Vector2(tileWidth * row, tileHeight * col), false, false);
+                        tileMap[row, col] = new Tile(bridgeTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        currentTile.thisTileState = TileState.Bridge;
                     }
                     else if (strings[col][row] == 'H')
                     {
-                        tileMap[row, col] = new Tile(ladderTileTexture, new Vector2(tileWidth * row, tileHeight * col), false, true);
+                        tileMap[row, col] = new Tile(ladderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        currentTile.thisTileState = TileState.Ladder;
                     }
                     else if (strings[col][row] == 'M')
                     {
-                        tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col), false, true);
+                        tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        currentTile.thisTileState = TileState.BridgeLadder;
                     }
                 }
             }
