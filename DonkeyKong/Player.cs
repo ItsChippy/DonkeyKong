@@ -61,11 +61,11 @@ namespace DonkeyKong
         public void MoveHorizontally(Vector2 inputDirection)
         {
             direction = inputDirection;
-            int tileWidth = 40;
-            Vector2 newDestination = position + direction * tileWidth;
+            Vector2 newDestination = GetNewDestination(direction);
             TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
+            TileType tileBelowPlayer = Game1.CheckTileType(GetNewDestination(new Vector2(0, 1)));
 
-            if (Game1.CheckTileType(position) == TileType.Ladder || Game1.CheckTileType(position) == TileType.Empty)
+            if (tileBelowPlayer == TileType.Bridge || tileBelowPlayer == TileType.BridgeLadder)
             {
                 if (tileAtNewDestination == TileType.Empty || tileAtNewDestination == TileType.Ladder)
                 {
@@ -78,8 +78,7 @@ namespace DonkeyKong
         public void MoveUp(Vector2 inputDirection) 
         {
             direction = inputDirection;
-            int tileWidth = 40;
-            Vector2 newDestination = position + direction * tileWidth;
+            Vector2 newDestination = GetNewDestination(direction);
             TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
 
             if (Game1.CheckTileType(position) == TileType.Ladder || Game1.CheckTileType(position) == TileType.BridgeLadder)
@@ -95,8 +94,7 @@ namespace DonkeyKong
         public void MoveDown(Vector2 inputDirection)
         {
             direction = inputDirection;
-            int tileWidth = 40;
-            Vector2 newDestination = position + direction * tileWidth;
+            Vector2 newDestination = GetNewDestination(direction);
             TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
 
             if (Game1.CheckTileType(position) != TileType.Bridge)
@@ -107,6 +105,12 @@ namespace DonkeyKong
                     isMoving = true;
                 }
             }
+        }
+
+        public Vector2 GetNewDestination(Vector2 direction)
+        {
+            int tileWidth = 40;
+            return position + direction * tileWidth;
         }
 
         public void Draw(SpriteBatch spriteBatch)

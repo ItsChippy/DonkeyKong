@@ -13,11 +13,11 @@ namespace DonkeyKong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        LoadingManager loadingManager;
+        private LoadingManager loadingManager;
 
         //player
         Player player;
-        Vector2 playerStartingPos;
+        int lives;
 
         //tiles and map (tile array)
         int numOfRows;
@@ -35,7 +35,9 @@ namespace DonkeyKong
         {
             _graphics.PreferredBackBufferHeight = 800;
             _graphics.PreferredBackBufferWidth = 840;
+            
             _graphics.ApplyChanges();
+
 
             base.Initialize();
         }
@@ -46,22 +48,10 @@ namespace DonkeyKong
 
             loadingManager = new LoadingManager(this);
 
-            //storing "map levels" to determine type of tile
-            List<string> stringsFromTextFile = new List<string>();
-            
-            StreamReader sr = new StreamReader("map.txt");
-            while(!sr.EndOfStream)
-            {
-                stringsFromTextFile.Add(sr.ReadLine());
-            }
-            sr.Close();
-
-            //loads the map and all tiles
-            numOfRows = stringsFromTextFile[0].Length;
-            numOfCols = stringsFromTextFile.Count;
+            numOfRows = loadingManager.stringsFromTextFile[0].Length;
+            numOfCols = loadingManager.stringsFromTextFile.Count;
             tileMap = new Tile[numOfRows, numOfCols];
-            loadingManager.LoadMap(tileMap, stringsFromTextFile, numOfRows, numOfCols);
-
+            loadingManager.LoadMap(tileMap, numOfRows, numOfCols);
             player = loadingManager.LoadPlayer(Window.ClientBounds.Width);
         }
 
@@ -93,6 +83,7 @@ namespace DonkeyKong
             base.Draw(gameTime);
         }
 
+        //returns the type of tile at the position of the Vector parameter
         public static TileType CheckTileType(Vector2 tilePosition)
         {
             int tileWidth = tileMap[0, 0].texture.Width;

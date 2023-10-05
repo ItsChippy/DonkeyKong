@@ -6,11 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Metadata;
+using System.IO;
 
 namespace DonkeyKong
 {
     public class LoadingManager
     {
+       public List<string> stringsFromTextFile;
+
        public Texture2D bridgeTileTexture;
        public Texture2D bridgeLadderTileTexture;
        public Texture2D emptyTileTexture;
@@ -24,33 +27,35 @@ namespace DonkeyKong
             emptyTileTexture = game.Content.Load<Texture2D>(@"empty");
             ladderTileTexture = game.Content.Load<Texture2D>(@"ladder");
             playerTexture = game.Content.Load<Texture2D>(@"supermariofront");
+            
+            FillListFromTextFile();
         }
 
-        public void LoadMap(Tile[,] tileMap, List<string> strings, int numOfRows, int numOfCols)
+        public void LoadMap(Tile[,] tileMap, int numOfRows, int numOfCols)
         {
             int tileWidth = bridgeTileTexture.Width;
             int tileHeight = bridgeTileTexture.Height;
-
+            
             for (int row = 0; row < numOfRows; row++)
             {
                 for (int col = 0; col < numOfCols; col++)
                 {
-                    if (strings[col][row] == '-')
+                    if (stringsFromTextFile[col][row] == '-')
                     {
                         tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.Empty;
                     }
-                    else if (strings[col][row] == 'X')
+                    else if (stringsFromTextFile[col][row] == 'X')
                     {
                         tileMap[row, col] = new Tile(bridgeTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.Bridge;
                     }
-                    else if (strings[col][row] == 'H')
+                    else if (stringsFromTextFile[col][row] == 'H')
                     {
                         tileMap[row, col] = new Tile(ladderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.Ladder;
                     }
-                    else if (strings[col][row] == 'M')
+                    else if (stringsFromTextFile[col][row] == 'M')
                     {
                         tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.BridgeLadder;
@@ -67,5 +72,16 @@ namespace DonkeyKong
             return new Player(playerTexture, playerStartingPos);
         }
 
+        private void FillListFromTextFile()
+        {
+            stringsFromTextFile = new List<string>();
+
+            StreamReader sr = new StreamReader("map.txt");
+            while (!sr.EndOfStream)
+            {
+                stringsFromTextFile.Add(sr.ReadLine());
+            }
+            sr.Close();
+        }
     }
 }
