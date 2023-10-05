@@ -18,8 +18,7 @@ namespace DonkeyKong
         {
             this.texture = texture;
             this.position = position;
-
-            rect = new Rectangle((int) position.X, (int)position.Y, texture.Width, texture.Height);
+            rect = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
 
         public void UpdateRectanglePos()

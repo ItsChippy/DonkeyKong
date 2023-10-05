@@ -33,11 +33,6 @@ namespace DonkeyKong
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferHeight = 800;
-            _graphics.PreferredBackBufferWidth = 840;
-            
-            _graphics.ApplyChanges();
-
 
             base.Initialize();
         }
@@ -50,8 +45,14 @@ namespace DonkeyKong
 
             numOfRows = loadingManager.stringsFromTextFile[0].Length;
             numOfCols = loadingManager.stringsFromTextFile.Count;
+
             tileMap = new Tile[numOfRows, numOfCols];
             loadingManager.LoadMap(tileMap, numOfRows, numOfCols);
+
+            _graphics.PreferredBackBufferHeight = 800;
+            _graphics.PreferredBackBufferWidth = loadingManager.emptyTileTexture.Width * numOfRows;
+            _graphics.ApplyChanges();
+
             player = loadingManager.LoadPlayer(Window.ClientBounds.Width);
         }
 
@@ -70,7 +71,10 @@ namespace DonkeyKong
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            var keys = Keyboard.GetState();
+            
             _spriteBatch.Begin();
+
             for (int row = 0; row < numOfRows; row++)
             {
                 for (int col = 0; col < numOfCols; col++)
@@ -78,7 +82,8 @@ namespace DonkeyKong
                     tileMap[row, col].Draw(_spriteBatch);
                 }
             }
-            player.Draw(_spriteBatch);
+            player.Draw(_spriteBatch, keys);
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }

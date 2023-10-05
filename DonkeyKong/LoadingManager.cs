@@ -26,7 +26,7 @@ namespace DonkeyKong
             bridgeLadderTileTexture = game.Content.Load<Texture2D>(@"bridgeLadder");
             emptyTileTexture = game.Content.Load<Texture2D>(@"empty");
             ladderTileTexture = game.Content.Load<Texture2D>(@"ladder");
-            playerTexture = game.Content.Load<Texture2D>(@"supermariofront");
+            playerTexture = game.Content.Load<Texture2D>(@"mario");
             
             FillListFromTextFile();
         }

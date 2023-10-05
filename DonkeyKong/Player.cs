@@ -17,11 +17,11 @@ namespace DonkeyKong
         Vector2 direction;
         bool isMoving = false;
 
-
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
             this.texture = texture;
             this.position = position;
+
         }
 
         public void Move(KeyboardState keys, GameTime gameTime, int screenWidth)
@@ -113,9 +113,20 @@ namespace DonkeyKong
             return position + direction * tileWidth;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, KeyboardState keys)
         {
-            spriteBatch.Draw(texture, position, Color.White);
+            SpriteEffects textureDirection = SpriteEffects.None;
+            
+            if (keys.IsKeyDown(Keys.Left))
+            {
+                textureDirection = SpriteEffects.FlipHorizontally;
+            }
+            else if (keys.IsKeyDown(Keys.Right))
+            {
+                textureDirection = SpriteEffects.None;
+            }
+
+            spriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, 2f, textureDirection, 0);
         }
     }
 }
