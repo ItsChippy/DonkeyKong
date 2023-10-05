@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    internal class BaseGameObject
+    public class BaseGameObject
     {
         public Texture2D texture;
         public Vector2 position;

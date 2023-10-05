@@ -10,9 +10,13 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    internal class Player : BaseGameObject
+    public class Player : BaseGameObject
     {
-        const float speed = 4f;
+        const float speed = 100f;
+        Vector2 destination;
+        Vector2 direction;
+        bool isMoving = false;
+
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
@@ -20,23 +24,62 @@ namespace DonkeyKong
             this.position = position;
         }
 
-        public void Move(KeyboardState keys, int width)
+        public void Move(KeyboardState keys, GameTime gameTime, int screenWidth)
         {
-            if (keys.IsKeyDown(Keys.Left) && position.X >= 0)
+            if (!isMoving)
             {
-                position.X -= speed;
+                if (keys.IsKeyDown(Keys.Left) && position.X > 0)
+                {
+                    ChangeDirectionHorizontal(new Vector2(-1, 0));
+                }
+                else if (keys.IsKeyDown(Keys.Right) && position.X + texture.Width < screenWidth)
+                {
+                    ChangeDirectionHorizontal(new Vector2(1, 0));
+                }
+                else if (keys.IsKeyDown(Keys.Up))
+                {
+                    ChangeDirectionVertical(new Vector2(0, -1));
+                }
+                else if (keys.IsKeyDown (Keys.Down))
+                {
+                    ChangeDirectionVertical(new Vector2(0, 1));
+                }
+
             }
-            if (keys.IsKeyDown(Keys.Right) &&  position.X + texture.Width <= width)
+            else
             {
-                position.X += speed;
+                position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (Vector2.Distance(position, destination) < 1)
+                {
+                    position = destination;
+                    isMoving = false;
+                }
             }
-            if (keys.IsKeyDown(Keys.Up))
+        }
+
+        public void ChangeDirectionHorizontal(Vector2 inputDirection)
+        {
+            direction = inputDirection;
+            int tileWidth = 40;
+            Vector2 newDestination = position + direction * tileWidth;
+            if (Game1.CheckIfEmpty(newDestination))
             {
-                position.Y -= speed;
+                destination = newDestination;
+                isMoving = true;
             }
-            if (keys.IsKeyDown(Keys.Down))
+        }
+
+        public void ChangeDirectionVertical(Vector2 inputDirection) 
+        {
+            direction = inputDirection;
+            int tileWidth = 40;
+            Vector2 newDestination = position + direction * tileWidth;
+
+            if (Game1.CheckIfLadder(newDestination))
             {
-                position.Y += speed;
+                destination = newDestination;
+                isMoving = true;
             }
         }
 

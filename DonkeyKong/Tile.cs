@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    internal class Tile : BaseGameObject
+    public class Tile : BaseGameObject
     {
         public bool isEmpty;
         public bool isLadder;
