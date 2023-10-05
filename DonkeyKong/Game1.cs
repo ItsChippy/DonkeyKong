@@ -93,18 +93,11 @@ namespace DonkeyKong
             base.Draw(gameTime);
         }
 
-        public static bool CheckIfLadder(Vector2 tilePosition)
+        public static TileType CheckTileType(Vector2 tilePosition)
         {
             int tileWidth = tileMap[0, 0].texture.Width;
             int tileHeight = tileMap[0, 0].texture.Height;
-            return tileMap[(int)tilePosition.X / tileWidth, (int) tilePosition.Y / tileHeight].isLadder;
-        }
-
-        public static bool CheckIfEmpty(Vector2 tilePosition)
-        {
-            int tileWidth = tileMap[0,0].texture.Width;
-            int tileHeight = tileMap[0,0].texture.Height;
-            return tileMap[(int)tilePosition.X / tileWidth, (int)tilePosition.Y / tileHeight].isEmpty;
+            return tileMap[(int)tilePosition.X / tileWidth, (int) tilePosition.Y / tileHeight].thisTileType;
         }
     }
 }

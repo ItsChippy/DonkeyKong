@@ -30,19 +30,19 @@ namespace DonkeyKong
             {
                 if (keys.IsKeyDown(Keys.Left) && position.X > 0)
                 {
-                    ChangeDirectionHorizontal(new Vector2(-1, 0));
+                   MoveHorizontally(new Vector2(-1, 0));
                 }
                 else if (keys.IsKeyDown(Keys.Right) && position.X + texture.Width < screenWidth)
                 {
-                    ChangeDirectionHorizontal(new Vector2(1, 0));
+                    MoveHorizontally(new Vector2(1, 0));
                 }
                 else if (keys.IsKeyDown(Keys.Up))
                 {
-                    ChangeDirectionVertical(new Vector2(0, -1));
+                    MoveUp(new Vector2(0, -1));
                 }
                 else if (keys.IsKeyDown (Keys.Down))
                 {
-                    ChangeDirectionVertical(new Vector2(0, 1));
+                    MoveDown(new Vector2(0, 1));
                 }
 
             }
@@ -58,28 +58,54 @@ namespace DonkeyKong
             }
         }
 
-        public void ChangeDirectionHorizontal(Vector2 inputDirection)
+        public void MoveHorizontally(Vector2 inputDirection)
         {
             direction = inputDirection;
             int tileWidth = 40;
             Vector2 newDestination = position + direction * tileWidth;
-            if (Game1.CheckIfEmpty(newDestination) && Game1.CheckIfLadder(position))
+            TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
+
+            if (Game1.CheckTileType(position) == TileType.Ladder || Game1.CheckTileType(position) == TileType.Empty)
             {
-                destination = newDestination;
-                isMoving = true;
+                if (tileAtNewDestination == TileType.Empty || tileAtNewDestination == TileType.Ladder)
+                {
+                    destination = newDestination;
+                    isMoving = true;
+                }
             }
         }
 
-        public void ChangeDirectionVertical(Vector2 inputDirection) 
+        public void MoveUp(Vector2 inputDirection) 
         {
             direction = inputDirection;
             int tileWidth = 40;
             Vector2 newDestination = position + direction * tileWidth;
+            TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
 
-            if (Game1.CheckIfLadder(newDestination))
+            if (Game1.CheckTileType(position) == TileType.Ladder || Game1.CheckTileType(position) == TileType.BridgeLadder)
             {
-                destination = newDestination;
-                isMoving = true;
+                if (tileAtNewDestination != TileType.Bridge)
+                {
+                    destination = newDestination;
+                    isMoving = true;
+                }
+            }
+        }
+
+        public void MoveDown(Vector2 inputDirection)
+        {
+            direction = inputDirection;
+            int tileWidth = 40;
+            Vector2 newDestination = position + direction * tileWidth;
+            TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
+
+            if (Game1.CheckTileType(position) != TileType.Bridge)
+            {
+                if (tileAtNewDestination == TileType.Ladder || tileAtNewDestination == TileType.BridgeLadder)
+                {
+                    destination = newDestination;
+                    isMoving = true;
+                }
             }
         }
 

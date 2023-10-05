@@ -30,32 +30,30 @@ namespace DonkeyKong
         {
             int tileWidth = bridgeTileTexture.Width;
             int tileHeight = bridgeTileTexture.Height;
-            Tile currentTile;
 
             for (int row = 0; row < numOfRows; row++)
             {
                 for (int col = 0; col < numOfCols; col++)
                 {
-                    currentTile = tileMap[row, col];
                     if (strings[col][row] == '-')
                     {
                         tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col));
-                        currentTile.thisTileState = TileState.Empty;
+                        tileMap[row, col].thisTileType = TileType.Empty;
                     }
                     else if (strings[col][row] == 'X')
                     {
                         tileMap[row, col] = new Tile(bridgeTileTexture, new Vector2(tileWidth * row, tileHeight * col));
-                        currentTile.thisTileState = TileState.Bridge;
+                        tileMap[row, col].thisTileType = TileType.Bridge;
                     }
                     else if (strings[col][row] == 'H')
                     {
                         tileMap[row, col] = new Tile(ladderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
-                        currentTile.thisTileState = TileState.Ladder;
+                        tileMap[row, col].thisTileType = TileType.Ladder;
                     }
                     else if (strings[col][row] == 'M')
                     {
                         tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
-                        currentTile.thisTileState = TileState.BridgeLadder;
+                        tileMap[row, col].thisTileType = TileType.BridgeLadder;
                     }
                 }
             }

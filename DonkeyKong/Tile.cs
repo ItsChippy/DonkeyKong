@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    public enum TileState
+    public enum TileType
     {
         Bridge,
         BridgeLadder,
@@ -17,7 +17,7 @@ namespace DonkeyKong
     }
     public class Tile : BaseGameObject
     {
-        public TileState thisTileState;
+        public TileType thisTileType;
         public Tile(Texture2D texture, Vector2 position) : base(texture, position)
         {
         }
