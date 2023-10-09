@@ -14,12 +14,14 @@ namespace DonkeyKong
     {
        public List<string> stringsFromTextFile;
 
-       public Texture2D bridgeTileTexture;
-       public Texture2D bridgeLadderTileTexture;
-       public Texture2D emptyTileTexture;
-       public Texture2D ladderTileTexture;
-       public Texture2D playerTexture;
-       public Texture2D characterSpriteSheet;
+        public Texture2D bridgeTileTexture;
+        public Texture2D bridgeLadderTileTexture;
+        public Texture2D emptyTileTexture;
+        public Texture2D ladderTileTexture;
+        public Texture2D playerTexture;
+        public Texture2D enemyTexture;
+        public Texture2D characterSpriteSheet;
+        public Texture2D enemySpriteSheet;
 
        public LoadingManager(Game game)
         {
@@ -29,6 +31,8 @@ namespace DonkeyKong
             ladderTileTexture = game.Content.Load<Texture2D>(@"ladder");
             playerTexture = game.Content.Load<Texture2D>(@"mario");
             characterSpriteSheet = game.Content.Load<Texture2D>(@"mario-pauline");
+            enemyTexture = game.Content.Load<Texture2D>(@"enemy");
+            enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
             
             FillListFromTextFile();
         }

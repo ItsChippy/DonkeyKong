@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
+    enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
     public class Player : BaseGameObject
     {
         const float speed = 120f;
         Vector2 destination;
         Vector2 direction;
         public bool isMoving = false;
-        int directionState;
+        Direction currentDirection;
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
@@ -29,6 +36,7 @@ namespace DonkeyKong
         {
             if (!isMoving)
             {
+                UpdateDirectionInput(keys);
                 if (keys.IsKeyDown(Keys.Left) && position.X > 0)
                 {
                    MoveHorizontally(new Vector2(-1, 0));
@@ -45,7 +53,6 @@ namespace DonkeyKong
                 {
                     MoveDown(new Vector2(0, 1));
                 }
-
             }
             else
             {
@@ -86,6 +93,7 @@ namespace DonkeyKong
             {
                 if (tileAtNewDestination != TileType.Bridge)
                 {
+                    currentDirection = Direction.Up;
                     destination = newDestination;
                     isMoving = true;
                 }
@@ -102,6 +110,7 @@ namespace DonkeyKong
             {
                 if (tileAtNewDestination == TileType.Ladder || tileAtNewDestination == TileType.BridgeLadder)
                 {
+                    currentDirection = Direction.Down;
                     destination = newDestination;
                     isMoving = true;
                 }
@@ -114,29 +123,38 @@ namespace DonkeyKong
             return position + direction * tileWidth;
         }
 
-        public void Draw(SpriteBatch spriteBatch, KeyboardState keys, Animation animation, Animation climbingAnimation)
+        public void UpdateDirectionInput(KeyboardState keys)
         {
-            SpriteEffects textureDirection = SpriteEffects.None;
-
             if (keys.IsKeyDown(Keys.Left))
             {
-                directionState = 0;
+                currentDirection = Direction.Left;
             }
             else if (keys.IsKeyDown(Keys.Right))
             {
-                directionState = 1;
+                currentDirection = Direction.Right;
             }
+        }
 
-            if (directionState == 0) 
+        public void Draw(SpriteBatch spriteBatch, Animation animation, Animation climbingAnimation)
+        {
+            switch (currentDirection)
             {
-                textureDirection = SpriteEffects.FlipHorizontally;
-            }
-            else if (directionState == 1)
-            {
-                textureDirection = SpriteEffects.None;
-            }
+                case Direction.Left:
+                    animation.Draw(spriteBatch, 2f, SpriteEffects.FlipHorizontally);
+                    break;
 
-            animation.Draw(spriteBatch, 2f, textureDirection);
+                case Direction.Right:
+                    animation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    break;
+
+                case Direction.Up:
+                    climbingAnimation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    break;
+
+                case Direction.Down:
+                    climbingAnimation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    break;
+            }
         }
     }
 }
