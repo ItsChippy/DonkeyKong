@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,26 +13,47 @@ namespace DonkeyKong
     {
         Texture2D spriteSheet;
         Vector2 position;
-        Rectangle[] animationFrames;
+        Rectangle currentSpriteRect;
         double frameTimer = 100;
         double frameInterval = 100;
+        int currentFrame;
+        int totalFrames;
+        int spriteWidth;
 
-        public Animation(Texture2D spriteSheet, int spriteWidth, int spriteHeight, int frames)
+        public Animation(Texture2D spriteSheet, int spriteWidth, int spriteHeight, int totalFrames, int startingPosX, int startingPosY)
         {
             this.spriteSheet = spriteSheet;
-            animationFrames = new Rectangle[frames];
-            FillAnimationArray(spriteWidth, spriteHeight);
+            this.totalFrames = totalFrames;
+            this.spriteWidth = spriteWidth;
+            currentSpriteRect = new Rectangle(startingPosX, startingPosY, spriteWidth, spriteHeight);
         }
 
-        private void FillAnimationArray(int spriteWidth, int spriteHeight)
+        public void UpdatePosition(Vector2 position)
         {
-            Rectangle spriteRect = new Rectangle(0, 0, spriteWidth, spriteHeight);
-            for (int index = 0; index < animationFrames.Length; index++) 
-            {
-                animationFrames[index] = spriteRect;
-                spriteRect.X = index * spriteWidth;
-            }
+            this.position = position;
+        }
 
+        public void Update(GameTime gameTime)
+        {
+
+            frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (frameTimer <= 0)
+            {
+                frameTimer = frameInterval;
+                currentFrame++;
+
+                if (currentFrame >= totalFrames)
+                {
+                    currentFrame = 0;
+                }
+                currentSpriteRect.X = currentFrame * spriteWidth;
+            }
+            
+        }
+
+        public void Draw(SpriteBatch spriteBatch, float scale, SpriteEffects effects)
+        {
+            spriteBatch.Draw(spriteSheet, position, currentSpriteRect, Color.White, 0, Vector2.Zero, scale, effects, 0);
         }
     }
 }

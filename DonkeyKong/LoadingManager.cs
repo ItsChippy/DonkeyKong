@@ -19,6 +19,7 @@ namespace DonkeyKong
        public Texture2D emptyTileTexture;
        public Texture2D ladderTileTexture;
        public Texture2D playerTexture;
+       public Texture2D characterSpriteSheet;
 
        public LoadingManager(Game game)
         {
@@ -27,6 +28,7 @@ namespace DonkeyKong
             emptyTileTexture = game.Content.Load<Texture2D>(@"empty");
             ladderTileTexture = game.Content.Load<Texture2D>(@"ladder");
             playerTexture = game.Content.Load<Texture2D>(@"mario");
+            characterSpriteSheet = game.Content.Load<Texture2D>(@"mario-pauline");
             
             FillListFromTextFile();
         }

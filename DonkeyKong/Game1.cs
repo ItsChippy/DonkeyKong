@@ -17,6 +17,8 @@ namespace DonkeyKong
 
         //player
         Player player;
+        Animation playerAnimation;
+        Animation playerClimbingAnimation;
         int lives;
 
         //tiles and map (tile array)
@@ -54,6 +56,8 @@ namespace DonkeyKong
             _graphics.ApplyChanges();
 
             player = loadingManager.LoadPlayer(Window.ClientBounds.Width);
+            playerAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5, 0, 0);
+            playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 170, 0);
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,8 +66,9 @@ namespace DonkeyKong
                 Exit();
             var keys = Keyboard.GetState();
 
-            player.Move(keys, gameTime, Window.ClientBounds.Width);
+            player.Move(keys, gameTime, Window.ClientBounds.Width, playerAnimation);
             player.UpdateRectanglePos();
+            playerAnimation.UpdatePosition(player.position);
             
             base.Update(gameTime);
         }
@@ -82,7 +87,7 @@ namespace DonkeyKong
                     tileMap[row, col].Draw(_spriteBatch);
                 }
             }
-            player.Draw(_spriteBatch, keys);
+            player.Draw(_spriteBatch, keys, playerAnimation, playerClimbingAnimation);
 
             _spriteBatch.End();
             base.Draw(gameTime);

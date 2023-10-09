@@ -12,10 +12,11 @@ namespace DonkeyKong
 {
     public class Player : BaseGameObject
     {
-        const float speed = 100f;
+        const float speed = 120f;
         Vector2 destination;
         Vector2 direction;
-        bool isMoving = false;
+        public bool isMoving = false;
+        int directionState;
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
@@ -24,7 +25,7 @@ namespace DonkeyKong
 
         }
 
-        public void Move(KeyboardState keys, GameTime gameTime, int screenWidth)
+        public void Move(KeyboardState keys, GameTime gameTime, int screenWidth, Animation animation)
         {
             if (!isMoving)
             {
@@ -49,7 +50,7 @@ namespace DonkeyKong
             else
             {
                 position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+                animation.Update(gameTime);
                 if (Vector2.Distance(position, destination) < 1)
                 {
                     position = destination;
@@ -113,20 +114,29 @@ namespace DonkeyKong
             return position + direction * tileWidth;
         }
 
-        public void Draw(SpriteBatch spriteBatch, KeyboardState keys)
+        public void Draw(SpriteBatch spriteBatch, KeyboardState keys, Animation animation, Animation climbingAnimation)
         {
             SpriteEffects textureDirection = SpriteEffects.None;
-            
+
             if (keys.IsKeyDown(Keys.Left))
+            {
+                directionState = 0;
+            }
+            else if (keys.IsKeyDown(Keys.Right))
+            {
+                directionState = 1;
+            }
+
+            if (directionState == 0) 
             {
                 textureDirection = SpriteEffects.FlipHorizontally;
             }
-            else if (keys.IsKeyDown(Keys.Right))
+            else if (directionState == 1)
             {
                 textureDirection = SpriteEffects.None;
             }
 
-            spriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, 2f, textureDirection, 0);
+            animation.Draw(spriteBatch, 2f, textureDirection);
         }
     }
 }

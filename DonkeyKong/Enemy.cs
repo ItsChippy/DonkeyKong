@@ -8,5 +8,7 @@ namespace DonkeyKong
 {
     public class Enemy
     {
+        const float speed = 100f;
+
     }
 }
