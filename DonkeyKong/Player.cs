@@ -29,7 +29,6 @@ namespace DonkeyKong
         {
             this.texture = texture;
             this.position = position;
-
         }
 
         public void Move(KeyboardState keys, GameTime gameTime, int screenWidth, Animation animation)
@@ -43,15 +42,15 @@ namespace DonkeyKong
                 }
                 else if (keys.IsKeyDown(Keys.Right) && position.X + texture.Width < screenWidth)
                 {
-                    MoveHorizontally(new Vector2(1, 0));
+                   MoveHorizontally(new Vector2(1, 0));
                 }
                 else if (keys.IsKeyDown(Keys.Up))
                 {
-                    MoveUp(new Vector2(0, -1));
+                   MoveUp(new Vector2(0, -1));
                 }
                 else if (keys.IsKeyDown (Keys.Down))
                 {
-                    MoveDown(new Vector2(0, 1));
+                   MoveDown(new Vector2(0, 1));
                 }
             }
             else
@@ -135,24 +134,24 @@ namespace DonkeyKong
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Animation animation, Animation climbingAnimation)
+        public void Draw(SpriteBatch spriteBatch, Animation walkingAnimation, Animation climbingAnimation)
         {
             switch (currentDirection)
             {
                 case Direction.Left:
-                    animation.Draw(spriteBatch, 2f, SpriteEffects.FlipHorizontally);
+                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally);
                     break;
 
                 case Direction.Right:
-                    animation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
                     break;
 
                 case Direction.Up:
-                    climbingAnimation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
                     break;
 
                 case Direction.Down:
-                    climbingAnimation.Draw(spriteBatch, 2f, SpriteEffects.None);
+                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
                     break;
             }
         }

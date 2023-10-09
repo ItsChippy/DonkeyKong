@@ -13,7 +13,8 @@ namespace DonkeyKong
         Bridge,
         BridgeLadder,
         Empty,
-        Ladder
+        Ladder,
+        Wall
     }
     public class Tile : BaseGameObject
     {

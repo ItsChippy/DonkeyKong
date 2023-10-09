@@ -17,9 +17,14 @@ namespace DonkeyKong
 
         //player
         Player player;
-        Animation playerAnimation;
+        Animation playerWalkingAnimation;
         Animation playerClimbingAnimation;
         int lives;
+
+        //enemy
+        Enemy[] enemies;
+        Animation enemyAnimation;
+        int numOfEnemies;
 
         //tiles and map (tile array)
         int numOfRows;
@@ -45,19 +50,28 @@ namespace DonkeyKong
 
             loadingManager = new LoadingManager(this);
 
+            //loading map and storing array dimensions
             numOfRows = loadingManager.stringsFromTextFile[0].Length;
             numOfCols = loadingManager.stringsFromTextFile.Count;
 
             tileMap = new Tile[numOfRows, numOfCols];
             loadingManager.LoadMap(tileMap, numOfRows, numOfCols);
 
+            //setting screen size
             _graphics.PreferredBackBufferHeight = 800;
             _graphics.PreferredBackBufferWidth = loadingManager.emptyTileTexture.Width * numOfRows;
             _graphics.ApplyChanges();
 
-            player = loadingManager.LoadPlayer(Window.ClientBounds.Width);
-            playerAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5, 0, 0);
+            //loading player and player animations
+            player = loadingManager.LoadPlayer(tileMap[numOfRows / 2, numOfCols - 2].position);
+            playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5, 0, 0);
             playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 153, 0);
+
+            //loading enemy and enemy animations
+            numOfEnemies = 4;
+            enemies = new Enemy[numOfEnemies];
+            FillEnemyArray();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,11 +80,17 @@ namespace DonkeyKong
                 Exit();
             var keys = Keyboard.GetState();
 
-            player.Move(keys, gameTime, Window.ClientBounds.Width, playerAnimation);
+            player.Move(keys, gameTime, Window.ClientBounds.Width, playerWalkingAnimation);
             player.UpdateRectanglePos();
-            playerAnimation.UpdatePosition(player.position);
+            playerWalkingAnimation.UpdatePosition(player.position);
             playerClimbingAnimation.UpdatePosition(player.position);
             
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].Update(gameTime, enemyAnimation);
+            }
+            Debug.WriteLine($"enemy {0}: {enemies[0].position}");
+            Debug.WriteLine($"{enemies[0].nextTile} {enemies[0].direction}");
             base.Update(gameTime);
         }
 
@@ -88,10 +108,27 @@ namespace DonkeyKong
                     tileMap[row, col].Draw(_spriteBatch);
                 }
             }
-            player.Draw(_spriteBatch, playerAnimation, playerClimbingAnimation);
+            player.Draw(_spriteBatch, playerWalkingAnimation, playerClimbingAnimation);
+            
+            for (int i = 0; i < enemies.Length; i++) 
+            {
+                enemies[i].Draw(_spriteBatch, enemyAnimation);
+            }
 
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        protected void FillEnemyArray()
+        {
+            int platformSpawningDifference = 2;
+            Vector2 enemySpawnPos;
+            for (int index = 0; index < enemies.Length;index++)
+            {
+                enemySpawnPos = tileMap[numOfRows / 2, numOfCols - platformSpawningDifference].position;
+                enemies[index] = loadingManager.LoadEnemy(enemySpawnPos);
+                platformSpawningDifference += 3;
+            }
         }
 
         //returns the type of tile at the position of the Vector parameter
@@ -101,5 +138,6 @@ namespace DonkeyKong
             int tileHeight = tileMap[0, 0].texture.Height;
             return tileMap[(int)tilePosition.X / tileWidth, (int) tilePosition.Y / tileHeight].thisTileType;
         }
+
     }
 }

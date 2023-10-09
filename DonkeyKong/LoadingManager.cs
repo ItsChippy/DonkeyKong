@@ -66,16 +66,18 @@ namespace DonkeyKong
                         tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.BridgeLadder;
                     }
+                    else if (stringsFromTextFile[col][row] == 'W')
+                    {
+                        tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        tileMap[row, col].thisTileType = TileType.Wall;
+                    }
                 }
             }
         }
 
-        public Player LoadPlayer(int width)
+        public Player LoadPlayer(Vector2 startPos)
         {
-            Vector2 playerStartingPos;
-            int playerStartingHeight = 680;
-            playerStartingPos = new Vector2(width / 2 - playerTexture.Width / 2, playerStartingHeight);
-            return new Player(playerTexture, playerStartingPos);
+            return new Player(playerTexture, startPos);
         }
 
         private void FillListFromTextFile()
@@ -88,6 +90,11 @@ namespace DonkeyKong
                 stringsFromTextFile.Add(sr.ReadLine());
             }
             sr.Close();
+        }
+
+        public Enemy LoadEnemy(Vector2 startPos)
+        {
+            return new Enemy(enemyTexture, startPos);
         }
     }
 }
