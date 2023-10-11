@@ -80,17 +80,12 @@ namespace DonkeyKong
                 Exit();
             var keys = Keyboard.GetState();
 
-            player.Move(keys, gameTime, Window.ClientBounds.Width, playerWalkingAnimation);
-            player.UpdateRectanglePos();
-            playerWalkingAnimation.UpdatePosition(player.position);
-            playerClimbingAnimation.UpdatePosition(player.position);
+            GameStateController.PlayingUpdate(keys, gameTime, player, playerWalkingAnimation, playerClimbingAnimation);
             
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].Update(gameTime, enemyAnimation);
             }
-            Debug.WriteLine($"enemy {0}: {enemies[0].position}");
-            Debug.WriteLine($"{enemies[0].nextTile} {enemies[0].direction}");
             base.Update(gameTime);
         }
 

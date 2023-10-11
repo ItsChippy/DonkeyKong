@@ -8,17 +8,11 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    enum Moving
-    {
-        Left,
-        Right
-    }
     public class Enemy : BaseGameObject
     {
         float speed;
         Vector2 direction;
         TileType nextTile;
-        Moving movingDirection;
         public Enemy(Texture2D texture, Vector2 position) : base (texture, position)
         {
             speed = GenerateRandomSpeed();
@@ -34,7 +28,6 @@ namespace DonkeyKong
             }
             position.X += direction.X * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
-
         public void Draw(SpriteBatch spriteBatch, Animation animation)
         {
             spriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);

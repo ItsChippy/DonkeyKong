@@ -31,16 +31,16 @@ namespace DonkeyKong
             this.position = position;
         }
 
-        public void Move(KeyboardState keys, GameTime gameTime, int screenWidth, Animation animation)
+        public void Move(KeyboardState keys, GameTime gameTime, Animation animation)
         {
             if (!isMoving)
             {
                 UpdateDirectionInput(keys);
-                if (keys.IsKeyDown(Keys.Left) && position.X > 0)
+                if (keys.IsKeyDown(Keys.Left))
                 {
                    MoveHorizontally(new Vector2(-1, 0));
                 }
-                else if (keys.IsKeyDown(Keys.Right) && position.X + texture.Width < screenWidth)
+                else if (keys.IsKeyDown(Keys.Right))
                 {
                    MoveHorizontally(new Vector2(1, 0));
                 }
