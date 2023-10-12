@@ -23,6 +23,7 @@ namespace DonkeyKong
         Vector2 destination;
         Vector2 direction;
         public bool isMoving = false;
+        public bool isHit = false;
         Direction currentDirection;
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
@@ -57,6 +58,8 @@ namespace DonkeyKong
             {
                 position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 animation.Update(gameTime);
+                UpdateRectanglePos();
+
                 if (Vector2.Distance(position, destination) < 1)
                 {
                     position = destination;

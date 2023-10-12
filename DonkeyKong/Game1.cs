@@ -8,27 +8,35 @@ using System.Runtime.CompilerServices;
 
 namespace DonkeyKong
 {
+    enum GameState
+    {
+        StartMenu,
+        Playing,
+        GameOver
+    }
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         private LoadingManager loadingManager;
-
+        GameState currentState;
+        
         //player
         Player player;
-        Animation playerWalkingAnimation;
-        Animation playerClimbingAnimation;
-        int lives;
+        public int lives;
+        public Animation playerWalkingAnimation;
+        public Animation playerClimbingAnimation;
 
         //enemy
         Enemy[] enemies;
-        Animation enemyAnimation;
+        public Animation[] enemyAnimations;
         int numOfEnemies;
 
         //tiles and map (tile array)
-        int numOfRows;
-        int numOfCols;
+        static int numOfRows;
+        static int numOfCols;
         static Tile[,] tileMap;
 
         public Game1()
@@ -49,6 +57,7 @@ namespace DonkeyKong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             loadingManager = new LoadingManager(this);
+            currentState = GameState.Playing;
 
             //loading map and storing array dimensions
             numOfRows = loadingManager.stringsFromTextFile[0].Length;
@@ -63,13 +72,15 @@ namespace DonkeyKong
             _graphics.ApplyChanges();
 
             //loading player and player animations
-            player = loadingManager.LoadPlayer(tileMap[numOfRows / 2, numOfCols - 2].position);
-            playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5, 0, 0);
-            playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 153, 0);
+            lives = 3;
+            player = loadingManager.LoadPlayer(tileMap[1, numOfCols - 2].position);
+            playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5);
+            playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 100, 153);
 
             //loading enemy and enemy animations
             numOfEnemies = 4;
             enemies = new Enemy[numOfEnemies];
+            enemyAnimations = new Animation[numOfEnemies];
             FillEnemyArray();
 
         }
@@ -80,11 +91,26 @@ namespace DonkeyKong
                 Exit();
             var keys = Keyboard.GetState();
 
-            GameStateController.PlayingUpdate(keys, gameTime, player, playerWalkingAnimation, playerClimbingAnimation);
-            
-            for (int i = 0; i < enemies.Length; i++)
+            if (lives == 0)
             {
-                enemies[i].Update(gameTime, enemyAnimation);
+                currentState = GameState.GameOver;
+            }
+
+            switch (currentState)
+            {
+                case GameState.StartMenu:
+
+                    break;
+
+                case GameState.Playing:
+
+                    GameStateController.Instance.PlayingUpdate(keys, gameTime, player, enemies, this);
+                    Debug.WriteLine(lives);
+                    break;
+
+                case GameState.GameOver:
+
+                    break;
             }
             base.Update(gameTime);
         }
@@ -96,18 +122,20 @@ namespace DonkeyKong
             
             _spriteBatch.Begin();
 
-            for (int row = 0; row < numOfRows; row++)
+            switch(currentState)
             {
-                for (int col = 0; col < numOfCols; col++)
-                {
-                    tileMap[row, col].Draw(_spriteBatch);
-                }
-            }
-            player.Draw(_spriteBatch, playerWalkingAnimation, playerClimbingAnimation);
-            
-            for (int i = 0; i < enemies.Length; i++) 
-            {
-                enemies[i].Draw(_spriteBatch, enemyAnimation);
+                case GameState.StartMenu:
+
+                    break;
+
+                case GameState.Playing:
+
+                    GameStateController.Instance.PlayingDraw(_spriteBatch, tileMap, player, enemies, this);
+                    break;
+
+                case GameState.GameOver:
+
+                    break;
             }
 
             _spriteBatch.End();
@@ -122,6 +150,7 @@ namespace DonkeyKong
             {
                 enemySpawnPos = tileMap[numOfRows / 2, numOfCols - platformSpawningDifference].position;
                 enemies[index] = loadingManager.LoadEnemy(enemySpawnPos);
+                enemyAnimations[index] = new Animation(loadingManager.enemySpriteSheet, 17, 16, 2, 200, 200);
                 platformSpawningDifference += 3;
             }
         }

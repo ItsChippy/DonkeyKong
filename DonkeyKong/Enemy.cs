@@ -26,11 +26,14 @@ namespace DonkeyKong
             {
                 direction.X *= -1;
             }
+
+            animation.Update(gameTime);
+            UpdateRectanglePos();
             position.X += direction.X * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         public void Draw(SpriteBatch spriteBatch, Animation animation)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
+            animation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
         }
 
         private Vector2 GetNextTile(Vector2 direction)
