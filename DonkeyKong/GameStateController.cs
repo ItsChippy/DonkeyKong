@@ -31,21 +31,10 @@ namespace DonkeyKong
             game1.playerWalkingAnimation.UpdatePosition(player.position);
             game1.playerClimbingAnimation.UpdatePosition(player.position);
             
-            for (int i = 0; i < enemies.Length; i++)
+            for (int index = 0; index < enemies.Length; index++)
             {
-                enemies[i].Update(gameTime, game1.enemyAnimations[i]);
-                game1.enemyAnimations[i].UpdatePosition(enemies[i].position);
-
-                if (CheckCollision(player.rect, enemies[i].rect))
-                {
-                    game1.lives--;
-                    collisionTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    
-                    if (collisionTimer == collisionDelay)
-                    {
-                        collisionTimer = 0;
-                    }
-                }
+                enemies[index].Update(gameTime, game1.enemyAnimations[index]);
+                game1.enemyAnimations[index].UpdatePosition(enemies[index].position);
             }
         }
 

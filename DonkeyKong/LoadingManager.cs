@@ -18,6 +18,7 @@ namespace DonkeyKong
         public Texture2D bridgeLadderTileTexture;
         public Texture2D emptyTileTexture;
         public Texture2D ladderTileTexture;
+        public Texture2D springTileTexture;
         public Texture2D playerTexture;
         public Texture2D enemyTexture;
         public Texture2D characterSpriteSheet;
@@ -29,18 +30,18 @@ namespace DonkeyKong
             bridgeLadderTileTexture = game.Content.Load<Texture2D>(@"bridgeLadder");
             emptyTileTexture = game.Content.Load<Texture2D>(@"empty");
             ladderTileTexture = game.Content.Load<Texture2D>(@"ladder");
+            springTileTexture = game.Content.Load<Texture2D>(@"spring");
             playerTexture = game.Content.Load<Texture2D>(@"mario");
             characterSpriteSheet = game.Content.Load<Texture2D>(@"mario-pauline");
             enemyTexture = game.Content.Load<Texture2D>(@"enemy");
             enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
-            
             FillListFromTextFile();
         }
 
         public void LoadMap(Tile[,] tileMap, int numOfRows, int numOfCols)
         {
-            int tileWidth = bridgeTileTexture.Width;
-            int tileHeight = bridgeTileTexture.Height;
+            int tileWidth = emptyTileTexture.Width;
+            int tileHeight = emptyTileTexture.Height;
             
             for (int row = 0; row < numOfRows; row++)
             {
@@ -65,6 +66,11 @@ namespace DonkeyKong
                     {
                         tileMap[row, col] = new Tile(bridgeLadderTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.BridgeLadder;
+                    }
+                    else if (stringsFromTextFile[col][row] == 'Z')
+                    {
+                        tileMap[row, col] = new Tile(springTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        tileMap[row, col].thisTileType = TileType.Spring;
                     }
                     else if (stringsFromTextFile[col][row] == 'W')
                     {

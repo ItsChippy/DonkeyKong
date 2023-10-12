@@ -29,7 +29,6 @@ namespace DonkeyKong
             currentSpriteRect = new Rectangle(startingPosX, startingPosY, spriteWidth, spriteHeight);
         }
 
-
         //Put in the main Update method
         public void UpdatePosition(Vector2 position)
         {

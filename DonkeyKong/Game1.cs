@@ -59,7 +59,7 @@ namespace DonkeyKong
             loadingManager = new LoadingManager(this);
             currentState = GameState.Playing;
 
-            //loading map and storing array dimensions
+            //map and storing array dimensions
             numOfRows = loadingManager.stringsFromTextFile[0].Length;
             numOfCols = loadingManager.stringsFromTextFile.Count;
 
@@ -71,13 +71,14 @@ namespace DonkeyKong
             _graphics.PreferredBackBufferWidth = loadingManager.emptyTileTexture.Width * numOfRows;
             _graphics.ApplyChanges();
 
-            //loading player and player animations
+            //player and player animations
             lives = 3;
-            player = loadingManager.LoadPlayer(tileMap[1, numOfCols - 2].position);
+            int firstPlatform = numOfCols - 2;
+            player = loadingManager.LoadPlayer(tileMap[1, firstPlatform].position);
             playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5);
             playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 100, 153);
 
-            //loading enemy and enemy animations
+            //enemy and enemy animations
             numOfEnemies = 4;
             enemies = new Enemy[numOfEnemies];
             enemyAnimations = new Animation[numOfEnemies];
@@ -105,7 +106,6 @@ namespace DonkeyKong
                 case GameState.Playing:
 
                     GameStateController.Instance.PlayingUpdate(keys, gameTime, player, enemies, this);
-                    Debug.WriteLine(lives);
                     break;
 
                 case GameState.GameOver:

@@ -75,7 +75,7 @@ namespace DonkeyKong
             TileType tileAtNewDestination = Game1.CheckTileType(newDestination);
             TileType tileBelowPlayer = Game1.CheckTileType(GetNewDestination(new Vector2(0, 1)));
 
-            if (tileBelowPlayer == TileType.Bridge || tileBelowPlayer == TileType.BridgeLadder)
+            if (tileBelowPlayer == TileType.Bridge || tileBelowPlayer == TileType.BridgeLadder || tileBelowPlayer == TileType.Spring)
             {
                 if (tileAtNewDestination == TileType.Empty || tileAtNewDestination == TileType.Ladder)
                 {

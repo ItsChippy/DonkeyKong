@@ -13,6 +13,8 @@ namespace DonkeyKong
         float speed;
         Vector2 direction;
         TileType nextTile;
+
+        bool isMovingRight;
         public Enemy(Texture2D texture, Vector2 position) : base (texture, position)
         {
             speed = GenerateRandomSpeed();
@@ -25,6 +27,10 @@ namespace DonkeyKong
             if (nextTile == TileType.Wall)
             {
                 direction.X *= -1;
+                if(direction.X == 1)
+                {
+                    isMovingRight = true;
+                }
             }
 
             animation.Update(gameTime);
@@ -33,7 +39,14 @@ namespace DonkeyKong
         }
         public void Draw(SpriteBatch spriteBatch, Animation animation)
         {
-            animation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+            if (isMovingRight)
+            {
+                animation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally);
+            }
+            else
+            {
+                animation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+            }
         }
 
         private Vector2 GetNextTile(Vector2 direction)

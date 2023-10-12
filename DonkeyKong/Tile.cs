@@ -14,6 +14,7 @@ namespace DonkeyKong
         BridgeLadder,
         Empty,
         Ladder,
+        Spring,
         Wall
     }
     public class Tile : BaseGameObject
