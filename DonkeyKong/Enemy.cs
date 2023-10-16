@@ -38,7 +38,7 @@ namespace DonkeyKong
                 }
             }
 
-            animation.Update(gameTime);
+            animation.UpdateAnimation(gameTime);
             UpdateRectanglePos();
             position.X += direction.X * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }

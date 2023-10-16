@@ -56,7 +56,7 @@ namespace DonkeyKong
             else
             {
                 position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                animation.Update(gameTime);
+                animation.UpdateAnimation(gameTime);
                 UpdateRectanglePos();
 
                 if (Vector2.Distance(position, destination) < 1)

@@ -19,24 +19,24 @@ namespace DonkeyKong
         int totalFrames;
         int spriteWidth;
 
-        public Animation(Texture2D spriteSheet, int spriteWidth, int spriteHeight, int totalFrames, double frameTimer = 100, double frameInterval = 100, int startingPosX = 0, int startingPosY = 0)
+        public Animation(Texture2D spriteSheet, int spriteWidth, int spriteHeight, int totalFrames, double animationSpeed = 100, int startingPosX = 0, int startingPosY = 0)
         {
             this.spriteSheet = spriteSheet;
             this.totalFrames = totalFrames;
             this.spriteWidth = spriteWidth;
-            this.frameTimer = frameTimer;
-            this.frameInterval = frameInterval;
+            frameTimer = animationSpeed;
+            frameInterval = animationSpeed;
             currentSpriteRect = new Rectangle(startingPosX, startingPosY, spriteWidth, spriteHeight);
         }
 
         //Put in the main Update method
-        public void UpdatePosition(Vector2 position)
+        public void UpdateAnimationPosition(Vector2 position)
         {
             this.position = position;
         }
 
         //Put in the classes Update method
-        public void Update(GameTime gameTime)
+        public void UpdateAnimation(GameTime gameTime)
         {
 
             frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;

@@ -34,8 +34,10 @@ namespace DonkeyKong
 
             player.Move(keys, gameTime, game1.playerWalkingAnimation);
             pauline.Update(gameTime);
-            game1.playerWalkingAnimation.UpdatePosition(player.position);
-            game1.playerClimbingAnimation.UpdatePosition(player.position);
+            game1.playerWalkingAnimation.UpdateAnimationPosition(player.position);
+            game1.playerClimbingAnimation.UpdateAnimationPosition(player.position);
+            
+            game1.donkeyKongAnimation.UpdateAnimation(gameTime);
 
             for (int i = 0; i < game1.springTiles.Count; i++)
             {
@@ -45,7 +47,7 @@ namespace DonkeyKong
             for (int index = 0; index < enemies.Length; index++)
             {
                 enemies[index].Update(gameTime, game1.enemyAnimations[index]);
-                game1.enemyAnimations[index].UpdatePosition(enemies[index].position);
+                game1.enemyAnimations[index].UpdateAnimationPosition(enemies[index].position);
             }
         }
 
@@ -71,6 +73,8 @@ namespace DonkeyKong
 
             pauline.Draw(spriteBatch);
             player.Draw(spriteBatch, game1.playerWalkingAnimation, game1.playerClimbingAnimation);
+            
+            game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
         }
 
         private bool CheckCollision(Rectangle rect1,  Rectangle rect2)

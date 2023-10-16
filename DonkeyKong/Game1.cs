@@ -37,6 +37,9 @@ namespace DonkeyKong
         //pauline (objective)
         Pauline pauline;
 
+        //donkey kong
+        public Animation donkeyKongAnimation;
+
         //tiles and map (tile array)
         static int numOfRows;
         static int numOfCols;
@@ -84,7 +87,7 @@ namespace DonkeyKong
             int firstPlatform = numOfCols - 2;
             player = loadingManager.LoadPlayer(tileMap[1, firstPlatform].position);
             playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 3);
-            playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 100, 153);
+            playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 153);
 
             //pauline
             int lastPlatform = numOfCols - 17;
@@ -96,6 +99,10 @@ namespace DonkeyKong
             enemyAnimations = new Animation[numOfEnemies];
             FillEnemyArray();
 
+            //donkey kong
+            donkeyKongAnimation = new Animation(loadingManager.donkeyKongSpriteSheet, 46, 32, 3, 500);
+            int donkeyKongPlatform = numOfCols - 15;
+            donkeyKongAnimation.UpdateAnimationPosition(tileMap[numOfRows / 2 - 1, donkeyKongPlatform].position);
         }
 
         protected override void Update(GameTime gameTime)
@@ -162,7 +169,7 @@ namespace DonkeyKong
             {
                 enemySpawnPos = tileMap[numOfRows / 2, numOfCols - platformSpawningDifference].position;
                 enemies[index] = loadingManager.LoadEnemy(enemySpawnPos);
-                enemyAnimations[index] = new Animation(loadingManager.enemySpriteSheet, 17, 16, 2, 200, 200);
+                enemyAnimations[index] = new Animation(loadingManager.enemySpriteSheet, 17, 16, 2, 200);
                 platformSpawningDifference += 3;
             }
         }

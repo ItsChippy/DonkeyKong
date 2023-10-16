@@ -24,6 +24,7 @@ namespace DonkeyKong
         public Texture2D characterSpriteSheet;
         public Texture2D enemySpriteSheet;
         public Texture2D paulineTexture;
+        public Texture2D donkeyKongSpriteSheet;
 
        public LoadingManager(Game game)
         {
@@ -37,6 +38,7 @@ namespace DonkeyKong
             enemyTexture = game.Content.Load<Texture2D>(@"enemy");
             enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
             paulineTexture = game.Content.Load<Texture2D>(@"pauline");
+            donkeyKongSpriteSheet = game.Content.Load<Texture2D>(@"dk_spritesheet");
             FillListFromTextFile();
         }
 
