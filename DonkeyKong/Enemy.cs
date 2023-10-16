@@ -27,9 +27,14 @@ namespace DonkeyKong
             if (nextTile == TileType.Wall)
             {
                 direction.X *= -1;
+                
                 if(direction.X == 1)
                 {
                     isMovingRight = true;
+                }
+                else
+                {
+                    isMovingRight = false;
                 }
             }
 

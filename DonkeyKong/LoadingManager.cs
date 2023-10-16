@@ -23,6 +23,7 @@ namespace DonkeyKong
         public Texture2D enemyTexture;
         public Texture2D characterSpriteSheet;
         public Texture2D enemySpriteSheet;
+        public Texture2D paulineTexture;
 
        public LoadingManager(Game game)
         {
@@ -35,10 +36,11 @@ namespace DonkeyKong
             characterSpriteSheet = game.Content.Load<Texture2D>(@"mario-pauline");
             enemyTexture = game.Content.Load<Texture2D>(@"enemy");
             enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
+            paulineTexture = game.Content.Load<Texture2D>(@"pauline");
             FillListFromTextFile();
         }
 
-        public void LoadMap(Tile[,] tileMap, int numOfRows, int numOfCols)
+        public void LoadMap(Tile[,] tileMap, List<SpringTile> springTiles, int numOfRows, int numOfCols)
         {
             int tileWidth = emptyTileTexture.Width;
             int tileHeight = emptyTileTexture.Height;
@@ -69,7 +71,8 @@ namespace DonkeyKong
                     }
                     else if (stringsFromTextFile[col][row] == 'Z')
                     {
-                        tileMap[row, col] = new Tile(springTileTexture, new Vector2(tileWidth * row, tileHeight * col));
+                        springTiles.Add(new SpringTile(springTileTexture, new Vector2(tileWidth * row, tileHeight * col), false));
+                        tileMap[row, col] = new Tile(emptyTileTexture, new Vector2(tileWidth * row, tileHeight * col));
                         tileMap[row, col].thisTileType = TileType.Spring;
                     }
                     else if (stringsFromTextFile[col][row] == 'W')
@@ -79,6 +82,11 @@ namespace DonkeyKong
                     }
                 }
             }
+        }
+
+        public Pauline LoadPauline(Vector2 startPos)
+        {
+            return new Pauline(paulineTexture, startPos);
         }
 
         public Player LoadPlayer(Vector2 startPos)

@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace DonkeyKong
 {
-    enum GameState
+    public enum GameState
     {
         StartMenu,
         Playing,
@@ -21,7 +21,7 @@ namespace DonkeyKong
         private SpriteBatch _spriteBatch;
 
         private LoadingManager loadingManager;
-        GameState currentState;
+        public GameState currentState;
         
         //player
         Player player;
@@ -34,10 +34,15 @@ namespace DonkeyKong
         public Animation[] enemyAnimations;
         int numOfEnemies;
 
+        //pauline (objective)
+        Pauline pauline;
+
         //tiles and map (tile array)
         static int numOfRows;
         static int numOfCols;
         static Tile[,] tileMap;
+
+        public List<SpringTile> springTiles;
 
         public Game1()
         {
@@ -64,10 +69,13 @@ namespace DonkeyKong
             numOfCols = loadingManager.stringsFromTextFile.Count;
 
             tileMap = new Tile[numOfRows, numOfCols];
-            loadingManager.LoadMap(tileMap, numOfRows, numOfCols);
+
+            springTiles = new List<SpringTile>();
+
+            loadingManager.LoadMap(tileMap, springTiles, numOfRows, numOfCols);
 
             //setting screen size
-            _graphics.PreferredBackBufferHeight = 800;
+            _graphics.PreferredBackBufferHeight = 900;
             _graphics.PreferredBackBufferWidth = loadingManager.emptyTileTexture.Width * numOfRows;
             _graphics.ApplyChanges();
 
@@ -75,8 +83,12 @@ namespace DonkeyKong
             lives = 3;
             int firstPlatform = numOfCols - 2;
             player = loadingManager.LoadPlayer(tileMap[1, firstPlatform].position);
-            playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 5);
+            playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 3);
             playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 100, 153);
+
+            //pauline
+            int lastPlatform = numOfCols - 17;
+            pauline = loadingManager.LoadPauline(tileMap[numOfRows / 2, lastPlatform].position);
 
             //enemy and enemy animations
             numOfEnemies = 4;
@@ -105,7 +117,7 @@ namespace DonkeyKong
 
                 case GameState.Playing:
 
-                    GameStateController.Instance.PlayingUpdate(keys, gameTime, player, enemies, this);
+                    GameStateController.Instance.PlayingUpdate(keys, gameTime, player, enemies, pauline, this);
                     break;
 
                 case GameState.GameOver:
@@ -130,7 +142,7 @@ namespace DonkeyKong
 
                 case GameState.Playing:
 
-                    GameStateController.Instance.PlayingDraw(_spriteBatch, tileMap, player, enemies, this);
+                    GameStateController.Instance.PlayingDraw(_spriteBatch, tileMap, player, enemies, pauline, this);
                     break;
 
                 case GameState.GameOver:

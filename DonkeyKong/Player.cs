@@ -23,7 +23,6 @@ namespace DonkeyKong
         Vector2 destination;
         Vector2 direction;
         public bool isMoving = false;
-        public bool isHit = false;
         Direction currentDirection;
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
