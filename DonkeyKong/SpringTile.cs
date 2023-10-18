@@ -19,6 +19,10 @@ namespace DonkeyKong
             positionAboveThisSpring = GetPositionAboveSpring(new Vector2(0, -1));
         }
 
+        /// <summary>
+        /// checks if player position is above the spring tile, removing it and flagging as hit if true
+        /// </summary>
+        /// <param name="player"></param>
         public void Update(Player player)
         {
             if (positionAboveThisSpring == player.position)

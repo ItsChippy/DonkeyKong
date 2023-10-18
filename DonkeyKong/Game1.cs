@@ -20,7 +20,7 @@ namespace DonkeyKong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private LoadingManager loadingManager;
+        public LoadingManager loadingManager;
         public GameState currentState;
         
         //player
@@ -65,7 +65,7 @@ namespace DonkeyKong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             loadingManager = new LoadingManager(this);
-            currentState = GameState.Playing;
+            currentState = GameState.StartMenu;
 
             //map and storing array dimensions
             numOfRows = loadingManager.stringsFromTextFile[0].Length;
@@ -111,15 +111,12 @@ namespace DonkeyKong
                 Exit();
             var keys = Keyboard.GetState();
 
-            if (lives == 0)
-            {
-                currentState = GameState.GameOver;
-            }
-
             switch (currentState)
             {
                 case GameState.StartMenu:
 
+                    LoadContent();
+                    GameStateController.Instance.StartMenuUpdate(keys, this);
                     break;
 
                 case GameState.Playing:
@@ -129,9 +126,11 @@ namespace DonkeyKong
 
                 case GameState.GameOver:
 
+                    GameStateController.Instance.GameOverUpdate(keys, this);
                     break;
             }
             base.Update(gameTime);
+            Debug.WriteLine(currentState.ToString());
         }
 
         protected override void Draw(GameTime gameTime)

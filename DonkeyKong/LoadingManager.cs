@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,10 @@ namespace DonkeyKong
         public Texture2D paulineTexture;
         public Texture2D donkeyKongSpriteSheet;
 
+        public SoundEffect playerWalkingSound;
+        public SoundEffectInstance playerWalkingSoundInstance;
+
+        public SoundEffect loseLifeSound;
        public LoadingManager(Game game)
         {
             bridgeTileTexture = game.Content.Load<Texture2D>(@"bridge");
@@ -39,6 +44,13 @@ namespace DonkeyKong
             enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
             paulineTexture = game.Content.Load<Texture2D>(@"pauline");
             donkeyKongSpriteSheet = game.Content.Load<Texture2D>(@"dk_spritesheet");
+
+            playerWalkingSound = game.Content.Load<SoundEffect>(@"walking");
+            playerWalkingSoundInstance = playerWalkingSound.CreateInstance();
+            playerWalkingSoundInstance.Volume = 0.3f;
+            playerWalkingSoundInstance.IsLooped = true;
+
+            loseLifeSound = game.Content.Load<SoundEffect>(@"loselife");
             FillListFromTextFile();
         }
 

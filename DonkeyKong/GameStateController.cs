@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ namespace DonkeyKong
     {
         float collisionDelay = 3f;
         float collisionTimer;
+        bool isPlayerHit;
         protected static GameStateController instance;
 
         public static GameStateController Instance
@@ -25,31 +27,61 @@ namespace DonkeyKong
             }
         }
 
+        public void StartMenuUpdate(KeyboardState keys, Game1 game1)
+        {
+            if (keys.IsKeyDown(Keys.Space))
+            {
+                game1.currentState = GameState.Playing;
+            }
+        }
+
         public void PlayingUpdate(KeyboardState keys, GameTime gameTime, Player player, Enemy[] enemies, Pauline pauline, Game1 game1)
         {
-            if (CheckWin(game1))
+            if (CheckWin(game1) || game1.lives == 0)
             {
                 game1.currentState = GameState.GameOver;
             }
 
+            EnemyPatrolAndCollision(game1, gameTime, player, enemies);
             player.Move(keys, gameTime, game1.playerWalkingAnimation);
-            pauline.Update(gameTime);
             game1.playerWalkingAnimation.UpdateAnimationPosition(player.position);
             game1.playerClimbingAnimation.UpdateAnimationPosition(player.position);
-            
-            game1.donkeyKongAnimation.UpdateAnimation(gameTime);
+           
+            if (player.isMoving)
+            {
+                game1.loadingManager.playerWalkingSoundInstance.Play();
+            }
+            else if (!player.isMoving)
+            {
+                game1.loadingManager.playerWalkingSoundInstance.IsLooped = false;
+            }
 
             for (int i = 0; i < game1.springTiles.Count; i++)
             {
                 game1.springTiles[i].Update(player);
             }
 
-            for (int index = 0; index < enemies.Length; index++)
+            pauline.Update(gameTime);
+            game1.donkeyKongAnimation.UpdateAnimation(gameTime);
+            Debug.WriteLine("collision timer: " + collisionTimer);
+        }
+
+        public void GameOverUpdate(KeyboardState keys, Game1 game1)
+        {
+            if(keys.IsKeyDown(Keys.Enter))
             {
-                enemies[index].Update(gameTime, game1.enemyAnimations[index]);
-                game1.enemyAnimations[index].UpdateAnimationPosition(enemies[index].position);
+                game1.currentState = GameState.StartMenu;
             }
         }
+
+        
+        //Game state Draw() methods
+
+        public void StartMenuDraw(KeyboardState keys, Game1 game1)
+        {
+
+        }
+
 
         public void PlayingDraw(SpriteBatch spriteBatch, Tile[,] tileMap, Player player, Enemy[] enemies, Pauline pauline, Game1 game1)
         {
@@ -75,6 +107,42 @@ namespace DonkeyKong
             player.Draw(spriteBatch, game1.playerWalkingAnimation, game1.playerClimbingAnimation);
             
             game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+        }
+
+        public void GameOverDraw(SpriteBatch spriteBatch, Game1 game1)
+        {
+
+        }
+
+
+
+        //explicit methods for the state controller methods
+
+        //Handles enemy patrolling and player collision
+        private void EnemyPatrolAndCollision(Game1 game1, GameTime gameTime, Player player, Enemy[] enemies)
+        {
+            for (int index = 0; index < enemies.Length; index++)
+            {
+                enemies[index].Update(gameTime, game1.enemyAnimations[index]);
+                game1.enemyAnimations[index].UpdateAnimationPosition(enemies[index].position);
+                if (CheckCollision(enemies[index].rect, player.rect) && !isPlayerHit)
+                {
+                    game1.lives--;
+                    game1.loadingManager.loseLifeSound.Play(0.2f, 0.0f, 0.0f);
+                    isPlayerHit = true;
+                }
+            }
+
+            //makes sure only one life gets removed if colliding with the enemy with an invulnerability timer of 3 seconds
+            if (isPlayerHit)
+            {
+                collisionTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (collisionTimer <= 0)
+            {
+                isPlayerHit = false;
+                collisionTimer = collisionDelay;
+            }
         }
 
         private bool CheckCollision(Rectangle rect1,  Rectangle rect2)

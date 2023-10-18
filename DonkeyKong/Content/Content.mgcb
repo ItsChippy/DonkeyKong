@@ -85,6 +85,12 @@
 /processorParam:TextureFormat=Color
 /build:enemy.png
 
+#begin hitspring.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:hitspring.wav
+
 #begin ladder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,6 +102,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ladder.png
+
+#begin loselife.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:loselife.wav
 
 #begin mario-pauline.png
 /importer:TextureImporter
@@ -144,4 +156,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spring.png
+
+#begin walking.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:walking.wav
 
