@@ -13,8 +13,6 @@ namespace DonkeyKong
         public bool isHit = false;
         Vector2 positionAboveThisSpring;
 
-        int offsetX = 1000;
-        int offsetY = 1000;
         public SpringTile(Texture2D texture, Vector2 position, bool isHit) : base(texture, position)
         {
             this.isHit = isHit;
@@ -29,6 +27,10 @@ namespace DonkeyKong
         {
             if (positionAboveThisSpring == player.position)
             {
+                if (!isHit)
+                {
+                    game1.points += 100;
+                }
                 isHit = true;
             }
         }

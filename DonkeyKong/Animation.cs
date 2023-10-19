@@ -55,9 +55,9 @@ namespace DonkeyKong
         }
 
         //Put in the classes Draw method along with the specific conditions
-        public void Draw(SpriteBatch spriteBatch, float scale, SpriteEffects effects)
+        public void Draw(SpriteBatch spriteBatch, float scale, SpriteEffects effects, Color color)
         {
-            spriteBatch.Draw(spriteSheet, position, currentSpriteRect, Color.White, 0, Vector2.Zero, scale, effects, 0);
+            spriteBatch.Draw(spriteSheet, position, currentSpriteRect, color, 0, Vector2.Zero, scale, effects, 0);
         }
     }
 }

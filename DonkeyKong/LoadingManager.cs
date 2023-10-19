@@ -29,6 +29,7 @@ namespace DonkeyKong
         public Texture2D startScreenTexture;
         public Texture2D gameWinScreenTexture;
         public Texture2D gameLoseScreenTexture;
+        public Texture2D umbrellaTexture;
 
         public SpriteFont spriteFont;
 
@@ -52,6 +53,7 @@ namespace DonkeyKong
             startScreenTexture = game.Content.Load<Texture2D>(@"start");
             gameWinScreenTexture = game.Content.Load<Texture2D>(@"win");
             gameLoseScreenTexture = game.Content.Load<Texture2D>(@"lose");
+            umbrellaTexture = game.Content.Load<Texture2D>(@"umbrella");
 
             spriteFont = game.Content.Load<SpriteFont>(@"myfont");
 

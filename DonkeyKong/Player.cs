@@ -22,13 +22,22 @@ namespace DonkeyKong
         const float speed = 150f;
         Vector2 destination;
         Vector2 direction;
+        
+        List<Vector2> livesPosition;
         public bool isMoving = false;
         Direction currentDirection;
+        Color color;
 
         public Player(Texture2D texture, Vector2 position) : base(texture, position)
         {
             this.texture = texture;
             this.position = position;
+            livesPosition = new List<Vector2>()
+            {
+                new Vector2(0, 30),
+                new Vector2(50, 30),
+                new Vector2(100, 30)
+            };
         }
 
         public void Move(KeyboardState keys, GameTime gameTime, Animation animation)
@@ -136,25 +145,42 @@ namespace DonkeyKong
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Animation walkingAnimation, Animation climbingAnimation)
+        public void Draw(SpriteBatch spriteBatch, Animation walkingAnimation, Animation climbingAnimation, bool isPlayerHit)
         {
+            if (isPlayerHit)
+            {
+                color = Color.Red;
+            }
+            else if (!isPlayerHit) 
+            {
+                color = Color.White;
+            }
+
             switch (currentDirection)
             {
                 case Direction.Left:
-                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally);
+                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally, color);
                     break;
 
                 case Direction.Right:
-                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+                    walkingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None, color);
                     break;
 
                 case Direction.Up:
-                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None, color);
                     break;
 
                 case Direction.Down:
-                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+                    climbingAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None, color);
                     break;
+            }
+        }
+
+        public void DrawLives(SpriteBatch spriteBatch, Game1 game1)
+        {
+            for(int index = 0; index < game1.lives; index++)
+            {
+                spriteBatch.Draw(texture, livesPosition[index], null, Color.White, 0, Vector2.Zero, 3f, SpriteEffects.None, 0f);
             }
         }
     }

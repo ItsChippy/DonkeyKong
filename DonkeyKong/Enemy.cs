@@ -46,11 +46,11 @@ namespace DonkeyKong
         {
             if (isMovingRight)
             {
-                animation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally);
+                animation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipHorizontally, Color.White);
             }
             else
             {
-                animation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+                animation.Draw(spriteBatch, 2.35f, SpriteEffects.None, Color.White);
             }
         }
 
@@ -62,7 +62,7 @@ namespace DonkeyKong
         private float GenerateRandomSpeed()
         {
             Random randomSpeed = new Random();
-            return randomSpeed.Next(90, 120);
+            return randomSpeed.Next(180, 200);
         }
 
         private float GenerateRandomDirection()

@@ -15,8 +15,10 @@ namespace DonkeyKong
     {
         float collisionDelay = 3f;
         float collisionTimer;
+        float timer;
         bool isPlayerHit;
         bool hasLost;
+        StringBuilder pointDisplay = new StringBuilder();
         protected static GameStateController instance;
 
         public static GameStateController Instance
@@ -32,6 +34,7 @@ namespace DonkeyKong
         {
             if (keys.IsKeyDown(Keys.Space))
             {
+                timer = 0;
                 game1.currentState = GameState.Playing;
             }
             
@@ -55,7 +58,7 @@ namespace DonkeyKong
             player.Move(keys, gameTime, game1.playerWalkingAnimation);
             game1.playerWalkingAnimation.UpdateAnimationPosition(player.position);
             game1.playerClimbingAnimation.UpdateAnimationPosition(player.position);
-           
+
             if (player.isMoving)
             {
                 game1.loadingManager.playerWalkingSoundInstance.Play();
@@ -69,29 +72,53 @@ namespace DonkeyKong
             {
                 game1.springTiles[i].Update(player, game1);
             }
+            for (int i = 0; i < game1.umbrellas.Length; i++)
+            {
+                game1.umbrellas[i].Update(game1);
+            }
 
             pauline.Update(gameTime);
             game1.donkeyKongAnimation.UpdateAnimation(gameTime);
-            Debug.WriteLine(game1.points);
+            pointDisplay.Clear();
+            pointDisplay.Append($"Points: {game1.points}");
         }
 
-        public void GameOverUpdate(KeyboardState keys, Game1 game1)
+        public void GameOverUpdate(KeyboardState keys, Game1 game1, GameTime gameTime, Player player, Pauline pauline)
         {
             if(keys.IsKeyDown(Keys.Enter))
             {
                 game1.Restart();
                 game1.currentState = GameState.StartMenu;
             }
+            if (!hasLost)
+            {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                
+                if (timer >= 1)
+                {
+                    player.position = pauline.position;
+                    player.position.X -= 50;
+                }
+            }
+
         }
 
         
         //Game state Draw() methods
 
-        public void StartMenuDraw(SpriteBatch spriteBatch, Game1 game1)
+        public void StartMenuDraw(SpriteBatch spriteBatch, Tile[,] tileMap, Game1 game1)
         {
+            for (int rows = 0; rows < tileMap.GetLength(0); rows++)
+            {
+                for (int cols = 0; cols < tileMap.GetLength(1); cols++)
+                {
+                    tileMap[rows, cols].Draw(spriteBatch);
+                }
+            }
+            
             game1.startScreen.Draw(spriteBatch);
 
-            game1.donkeyKongAnimation.Draw(spriteBatch, 2.5f, SpriteEffects.None);
+            game1.donkeyKongAnimation.Draw(spriteBatch, 2.5f, SpriteEffects.None, Color.White);
         }
 
 
@@ -115,15 +142,30 @@ namespace DonkeyKong
                 enemies[i].Draw(spriteBatch, game1.enemyAnimations[i]);
             }
 
-            player.Draw(spriteBatch, game1.playerWalkingAnimation, game1.playerClimbingAnimation);
+            for (int i = 0; i < game1.umbrellas.Length; i++)
+            {
+                game1.umbrellas[i].Draw(spriteBatch);
+            }
 
+            player.Draw(spriteBatch, game1.playerWalkingAnimation, game1.playerClimbingAnimation, isPlayerHit);
+            player.DrawLives(spriteBatch, game1);
+            spriteBatch.DrawString(game1.loadingManager.spriteFont, "Lives", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(game1.loadingManager.spriteFont, pointDisplay, new Vector2(0, 75), Color.White);
             pauline.Draw(spriteBatch);
-            
-            game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
+            game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None, Color.White);
         }
 
-        public void GameOverDraw(SpriteBatch spriteBatch, Game1 game1)
+        public void GameOverDraw(SpriteBatch spriteBatch, Tile[,] tileMap, Player player, Pauline pauline, Game1 game1, GameTime gameTime)
         {
+            
+            for (int rows = 0; rows < tileMap.GetLength(0); rows++)
+            {
+                for (int cols = 0; cols < tileMap.GetLength(1); cols++)
+                {
+                    tileMap[rows, cols].Draw(spriteBatch);
+                }
+            }
+
             if (hasLost)
             {
                 game1.gameOverScreen.DrawLose(spriteBatch);
@@ -131,6 +173,9 @@ namespace DonkeyKong
             else if (!hasLost)
             {
                 game1.gameOverScreen.DrawWin(spriteBatch);
+                spriteBatch.Draw(player.texture, player.position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
+                pauline.Draw(spriteBatch);
+                game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipVertically, Color.White);
             }
 
         }
@@ -149,6 +194,7 @@ namespace DonkeyKong
                 if (CheckCollision(enemies[index].rect, player.rect) && !isPlayerHit)
                 {
                     game1.lives--;
+                    game1.points -= 25;
                     game1.loadingManager.loseLifeSound.Play(0.2f, 0.0f, 0.0f);
                     isPlayerHit = true;
                 }

@@ -29,7 +29,7 @@ namespace DonkeyKong
             this.font = font;
             this.game1 = game1;
 
-            textPosition = new Vector2(screenWidth / 2, 100);
+            textPosition = new Vector2(screenWidth / 2, 50);
         }
 
         public void DrawLose(SpriteBatch spriteBatch)
@@ -50,7 +50,7 @@ namespace DonkeyKong
 
             Vector2 textMiddlePoint = font.MeasureString(text) / 2;
 
-            spriteBatch.Draw(winTexture, winScreenPosition, Color.White);
+            //spriteBatch.Draw(winTexture, winScreenPosition, Color.White);
             spriteBatch.DrawString(font, text, textPosition, Color.White, 0f, textMiddlePoint, 1.5f, SpriteEffects.None, 0f);
         }
     }

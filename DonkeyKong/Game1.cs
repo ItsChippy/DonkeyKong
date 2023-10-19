@@ -22,7 +22,9 @@ namespace DonkeyKong
 
         public LoadingManager loadingManager;
         public StartScreen startScreen;
+
         public GameOverScreen gameOverScreen;
+
         public GameState currentState;
 
         //player
@@ -39,6 +41,9 @@ namespace DonkeyKong
 
         //pauline (objective)
         Pauline pauline;
+
+        //collectibles
+        public Umbrella[] umbrellas;
 
         //donkey kong
         public Animation donkeyKongAnimation;
@@ -101,7 +106,6 @@ namespace DonkeyKong
                                                           Window.ClientBounds.Height / 2 - gameLoseScreenTexture.Height / 2);
             gameOverScreen = new GameOverScreen(gameWinScreenTexture, gameWinScreenTexturePos, gameLoseScreenTexture, gameLoseScreenTexturePos, loadingManager.spriteFont, this, Window.ClientBounds.Width);
 
-
             //player and player animations
             lives = 3;
             int firstPlatform = numOfCols - 2;
@@ -112,6 +116,9 @@ namespace DonkeyKong
             //pauline
             int lastPlatform = numOfCols - 17;
             pauline = loadingManager.LoadPauline(tileMap[numOfRows / 2, lastPlatform].position);
+
+            //umbrellas
+            FillUmbrellaArray();
 
             //enemy and enemy animations
             numOfEnemies = 4;
@@ -145,7 +152,7 @@ namespace DonkeyKong
 
                 case GameState.GameOver:
 
-                    GameStateController.Instance.GameOverUpdate(keys, this);
+                    GameStateController.Instance.GameOverUpdate(keys, this, gameTime, player, pauline);
                     break;
             }
             base.Update(gameTime);
@@ -163,7 +170,7 @@ namespace DonkeyKong
             {
                 case GameState.StartMenu:
 
-                    GameStateController.Instance.StartMenuDraw(_spriteBatch, this);
+                    GameStateController.Instance.StartMenuDraw(_spriteBatch, tileMap, this);
                     break;
 
                 case GameState.Playing:
@@ -173,7 +180,7 @@ namespace DonkeyKong
 
                 case GameState.GameOver:
 
-                    GameStateController.Instance.GameOverDraw(_spriteBatch, this);
+                    GameStateController.Instance.GameOverDraw(_spriteBatch, tileMap, player, pauline, this, gameTime);
                     break;
             }
 
@@ -192,6 +199,18 @@ namespace DonkeyKong
                 enemyAnimations[index] = new Animation(loadingManager.enemySpriteSheet, 17, 16, 2, 200);
                 platformSpawningDifference += 3;
             }
+        }
+
+        protected void FillUmbrellaArray()
+        {
+            umbrellas = new Umbrella[]
+            {
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 4, numOfCols - 2].position, player),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 7, numOfCols - 5].position, player),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 14, numOfCols - 8].position, player),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 13, numOfCols - 11].position, player),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 19, numOfCols - 14].position, player)
+            };
         }
 
         //returns the type of tile at the position of the Vector parameter
