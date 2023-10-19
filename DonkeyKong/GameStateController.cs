@@ -16,6 +16,7 @@ namespace DonkeyKong
         float collisionDelay = 3f;
         float collisionTimer;
         bool isPlayerHit;
+        bool hasLost;
         protected static GameStateController instance;
 
         public static GameStateController Instance
@@ -27,18 +28,26 @@ namespace DonkeyKong
             }
         }
 
-        public void StartMenuUpdate(KeyboardState keys, Game1 game1)
+        public void StartMenuUpdate(KeyboardState keys, Game1 game1, GameTime gameTime)
         {
             if (keys.IsKeyDown(Keys.Space))
             {
                 game1.currentState = GameState.Playing;
             }
+            
+            game1.donkeyKongAnimation.UpdateAnimation(gameTime);
         }
 
         public void PlayingUpdate(KeyboardState keys, GameTime gameTime, Player player, Enemy[] enemies, Pauline pauline, Game1 game1)
         {
-            if (CheckWin(game1) || game1.lives == 0)
+            if (CheckWin(game1) || keys.IsKeyDown(Keys.F))
             {
+                hasLost = false;
+                game1.currentState = GameState.GameOver;
+            }
+            else if (game1.lives == 0 || keys.IsKeyDown(Keys.G))
+            {
+                hasLost = true;
                 game1.currentState = GameState.GameOver;
             }
 
@@ -58,18 +67,19 @@ namespace DonkeyKong
 
             for (int i = 0; i < game1.springTiles.Count; i++)
             {
-                game1.springTiles[i].Update(player);
+                game1.springTiles[i].Update(player, game1);
             }
 
             pauline.Update(gameTime);
             game1.donkeyKongAnimation.UpdateAnimation(gameTime);
-            Debug.WriteLine("collision timer: " + collisionTimer);
+            Debug.WriteLine(game1.points);
         }
 
         public void GameOverUpdate(KeyboardState keys, Game1 game1)
         {
             if(keys.IsKeyDown(Keys.Enter))
             {
+                game1.Restart();
                 game1.currentState = GameState.StartMenu;
             }
         }
@@ -77,9 +87,11 @@ namespace DonkeyKong
         
         //Game state Draw() methods
 
-        public void StartMenuDraw(KeyboardState keys, Game1 game1)
+        public void StartMenuDraw(SpriteBatch spriteBatch, Game1 game1)
         {
+            game1.startScreen.Draw(spriteBatch);
 
+            game1.donkeyKongAnimation.Draw(spriteBatch, 2.5f, SpriteEffects.None);
         }
 
 
@@ -103,14 +115,23 @@ namespace DonkeyKong
                 enemies[i].Draw(spriteBatch, game1.enemyAnimations[i]);
             }
 
-            pauline.Draw(spriteBatch);
             player.Draw(spriteBatch, game1.playerWalkingAnimation, game1.playerClimbingAnimation);
+
+            pauline.Draw(spriteBatch);
             
             game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.None);
         }
 
         public void GameOverDraw(SpriteBatch spriteBatch, Game1 game1)
         {
+            if (hasLost)
+            {
+                game1.gameOverScreen.DrawLose(spriteBatch);
+            }
+            else if (!hasLost)
+            {
+                game1.gameOverScreen.DrawWin(spriteBatch);
+            }
 
         }
 

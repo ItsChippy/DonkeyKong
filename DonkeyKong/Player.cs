@@ -19,7 +19,7 @@ namespace DonkeyKong
     }
     public class Player : BaseGameObject
     {
-        const float speed = 120f;
+        const float speed = 150f;
         Vector2 destination;
         Vector2 direction;
         public bool isMoving = false;

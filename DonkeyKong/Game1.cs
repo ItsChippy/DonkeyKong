@@ -21,11 +21,14 @@ namespace DonkeyKong
         private SpriteBatch _spriteBatch;
 
         public LoadingManager loadingManager;
+        public StartScreen startScreen;
+        public GameOverScreen gameOverScreen;
         public GameState currentState;
-        
+
         //player
         Player player;
         public int lives;
+        public int points;
         public Animation playerWalkingAnimation;
         public Animation playerClimbingAnimation;
 
@@ -82,6 +85,23 @@ namespace DonkeyKong
             _graphics.PreferredBackBufferWidth = loadingManager.emptyTileTexture.Width * numOfRows;
             _graphics.ApplyChanges();
 
+            //start screen
+            Texture2D startScreenTexture = loadingManager.startScreenTexture;
+            Vector2 startScreenTexturePos = new Vector2(Window.ClientBounds.Width / 2 - startScreenTexture.Width / 2,
+                                                        Window.ClientBounds.Height / 2 - startScreenTexture.Height / 2);
+            startScreen = new StartScreen(startScreenTexture, loadingManager.spriteFont, startScreenTexturePos, Window.ClientBounds.Width);
+
+            //game over screen
+            Texture2D gameWinScreenTexture = loadingManager.gameWinScreenTexture;
+            Vector2 gameWinScreenTexturePos = new Vector2(Window.ClientBounds.Width / 2 - gameWinScreenTexture.Width / 2,
+                                                          Window.ClientBounds.Height / 2 - gameWinScreenTexture.Height / 2);
+            
+            Texture2D gameLoseScreenTexture = loadingManager.gameLoseScreenTexture;
+            Vector2 gameLoseScreenTexturePos = new Vector2(Window.ClientBounds.Width / 2 - gameLoseScreenTexture.Width / 2,
+                                                          Window.ClientBounds.Height / 2 - gameLoseScreenTexture.Height / 2);
+            gameOverScreen = new GameOverScreen(gameWinScreenTexture, gameWinScreenTexturePos, gameLoseScreenTexture, gameLoseScreenTexturePos, loadingManager.spriteFont, this, Window.ClientBounds.Width);
+
+
             //player and player animations
             lives = 3;
             int firstPlatform = numOfCols - 2;
@@ -115,8 +135,7 @@ namespace DonkeyKong
             {
                 case GameState.StartMenu:
 
-                    LoadContent();
-                    GameStateController.Instance.StartMenuUpdate(keys, this);
+                    GameStateController.Instance.StartMenuUpdate(keys, this, gameTime);
                     break;
 
                 case GameState.Playing:
@@ -144,6 +163,7 @@ namespace DonkeyKong
             {
                 case GameState.StartMenu:
 
+                    GameStateController.Instance.StartMenuDraw(_spriteBatch, this);
                     break;
 
                 case GameState.Playing:
@@ -153,6 +173,7 @@ namespace DonkeyKong
 
                 case GameState.GameOver:
 
+                    GameStateController.Instance.GameOverDraw(_spriteBatch, this);
                     break;
             }
 
@@ -181,5 +202,9 @@ namespace DonkeyKong
             return tileMap[(int)tilePosition.X / tileWidth, (int) tilePosition.Y / tileHeight].thisTileType;
         }
 
+        public void Restart()
+        {
+            LoadContent();
+        }
     }
 }

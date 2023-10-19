@@ -13,6 +13,8 @@ namespace DonkeyKong
         public bool isHit = false;
         Vector2 positionAboveThisSpring;
 
+        int offsetX = 1000;
+        int offsetY = 1000;
         public SpringTile(Texture2D texture, Vector2 position, bool isHit) : base(texture, position)
         {
             this.isHit = isHit;
@@ -23,7 +25,7 @@ namespace DonkeyKong
         /// checks if player position is above the spring tile, removing it and flagging as hit if true
         /// </summary>
         /// <param name="player"></param>
-        public void Update(Player player)
+        public void Update(Player player, Game1 game1)
         {
             if (positionAboveThisSpring == player.position)
             {

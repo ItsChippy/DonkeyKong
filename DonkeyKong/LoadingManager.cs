@@ -26,6 +26,11 @@ namespace DonkeyKong
         public Texture2D enemySpriteSheet;
         public Texture2D paulineTexture;
         public Texture2D donkeyKongSpriteSheet;
+        public Texture2D startScreenTexture;
+        public Texture2D gameWinScreenTexture;
+        public Texture2D gameLoseScreenTexture;
+
+        public SpriteFont spriteFont;
 
         public SoundEffect playerWalkingSound;
         public SoundEffectInstance playerWalkingSoundInstance;
@@ -44,6 +49,11 @@ namespace DonkeyKong
             enemySpriteSheet = game.Content.Load<Texture2D>(@"enemy_spritesheet");
             paulineTexture = game.Content.Load<Texture2D>(@"pauline");
             donkeyKongSpriteSheet = game.Content.Load<Texture2D>(@"dk_spritesheet");
+            startScreenTexture = game.Content.Load<Texture2D>(@"start");
+            gameWinScreenTexture = game.Content.Load<Texture2D>(@"win");
+            gameLoseScreenTexture = game.Content.Load<Texture2D>(@"lose");
+
+            spriteFont = game.Content.Load<SpriteFont>(@"myfont");
 
             playerWalkingSound = game.Content.Load<SoundEffect>(@"walking");
             playerWalkingSoundInstance = playerWalkingSound.CreateInstance();
