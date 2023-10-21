@@ -29,7 +29,7 @@ namespace DonkeyKong
                 isHit = true;
                 rect.Offset(1000, 1000);
                 game1.points += 75;
-                sound.Play();
+                sound.Play(0.3f, 0.0f, 0.0f);
             }
         }
 
