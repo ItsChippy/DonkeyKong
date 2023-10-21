@@ -37,6 +37,7 @@ namespace DonkeyKong
         public SoundEffectInstance playerWalkingSoundInstance;
 
         public SoundEffect loseLifeSound;
+        public SoundEffect pickupSound;
        public LoadingManager(Game game)
         {
             bridgeTileTexture = game.Content.Load<Texture2D>(@"bridge");
@@ -63,6 +64,7 @@ namespace DonkeyKong
             playerWalkingSoundInstance.IsLooped = true;
 
             loseLifeSound = game.Content.Load<SoundEffect>(@"loselife");
+            pickupSound = game.Content.Load<SoundEffect>(@"pickup");
             FillListFromTextFile();
         }
 

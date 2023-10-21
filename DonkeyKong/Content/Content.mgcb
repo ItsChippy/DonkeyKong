@@ -164,6 +164,12 @@
 /processorParam:TextureFormat=Color
 /build:pauline.png
 
+#begin pickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pickup.wav
+
 #begin spring.png
 /importer:TextureImporter
 /processor:TextureProcessor

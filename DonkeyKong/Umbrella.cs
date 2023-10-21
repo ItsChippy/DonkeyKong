@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,13 @@ namespace DonkeyKong
     {
         public bool isHit;
         Player player;
+        SoundEffect sound;
 
-        public Umbrella(Texture2D texture, Vector2 position, Player player) :base(texture, position)
+        public Umbrella(Texture2D texture, Vector2 position, Player player, SoundEffect sound) :base(texture, position)
         {
             isHit = false;
             this.player = player;
+            this.sound = sound;
         }
 
         public void Update(Game1 game1)
@@ -26,6 +29,7 @@ namespace DonkeyKong
                 isHit = true;
                 rect.Offset(1000, 1000);
                 game1.points += 75;
+                sound.Play();
             }
         }
 

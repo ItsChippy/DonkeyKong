@@ -205,11 +205,11 @@ namespace DonkeyKong
         {
             umbrellas = new Umbrella[]
             {
-                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 4, numOfCols - 2].position, player),
-                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 7, numOfCols - 5].position, player),
-                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 14, numOfCols - 8].position, player),
-                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 13, numOfCols - 11].position, player),
-                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 19, numOfCols - 14].position, player)
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 4, numOfCols - 2].position, player, loadingManager.pickupSound),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 7, numOfCols - 5].position, player, loadingManager.pickupSound),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 14, numOfCols - 8].position, player, loadingManager.pickupSound),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 13, numOfCols - 11].position, player , loadingManager.pickupSound),
+                new Umbrella(loadingManager.umbrellaTexture, tileMap[numOfRows - 19, numOfCols - 14].position, player, loadingManager.pickupSound)
             };
         }
 
