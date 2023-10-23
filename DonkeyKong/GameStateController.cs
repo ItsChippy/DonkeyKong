@@ -83,22 +83,30 @@ namespace DonkeyKong
             pointDisplay.Append($"Points: {game1.points}");
         }
 
-        public void GameOverUpdate(KeyboardState keys, Game1 game1, GameTime gameTime, Player player, Pauline pauline)
+        public void GameOverUpdate(KeyboardState keys, Tile[,] tileMap, Game1 game1, GameTime gameTime, Player player, Pauline pauline)
         {
             if(keys.IsKeyDown(Keys.Enter))
             {
                 game1.Restart();
                 game1.currentState = GameState.StartMenu;
             }
-            if (!hasLost)
+            if (hasLost)
             {
-                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                
-                if (timer >= 1)
+                return;
+            }
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            for (int platformsWithSprings = 8; platformsWithSprings < 17; platformsWithSprings++) 
+            {
+                for (int firstSpringTile = 5; firstSpringTile < 17; firstSpringTile++) 
                 {
-                    player.position = pauline.position;
-                    player.position.X -= 50;
+                    tileMap[platformsWithSprings, firstSpringTile].position.Y = tileMap[platformsWithSprings, 16].position.Y;
                 }
+            }
+            if (timer >= 3)
+            {
+                player.position = pauline.position;
+                player.position.X -= 50;
             }
 
         }
@@ -170,13 +178,10 @@ namespace DonkeyKong
             {
                 game1.gameOverScreen.DrawLose(spriteBatch);
             }
-            else if (!hasLost)
-            {
-                game1.gameOverScreen.DrawWin(spriteBatch);
-                spriteBatch.Draw(player.texture, player.position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
-                pauline.Draw(spriteBatch);
-                game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipVertically, Color.White);
-            }
+            game1.gameOverScreen.DrawWin(spriteBatch);
+            spriteBatch.Draw(player.texture, player.position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
+            pauline.Draw(spriteBatch);
+            game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipVertically, Color.White);
 
         }
 

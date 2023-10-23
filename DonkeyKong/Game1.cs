@@ -109,6 +109,7 @@ namespace DonkeyKong
             //player and player animations
             lives = 3;
             int firstPlatform = numOfCols - 2;
+            points = 0;
             player = loadingManager.LoadPlayer(tileMap[1, firstPlatform].position);
             playerWalkingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 3);
             playerClimbingAnimation = new Animation(loadingManager.characterSpriteSheet, 17, 17, 1, 100, 153);
@@ -152,11 +153,10 @@ namespace DonkeyKong
 
                 case GameState.GameOver:
 
-                    GameStateController.Instance.GameOverUpdate(keys, this, gameTime, player, pauline);
+                    GameStateController.Instance.GameOverUpdate(keys, tileMap, this, gameTime, player, pauline);
                     break;
             }
             base.Update(gameTime);
-            Debug.WriteLine(currentState.ToString());
         }
 
         protected override void Draw(GameTime gameTime)

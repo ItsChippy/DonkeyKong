@@ -12,7 +12,7 @@ namespace DonkeyKong
     public class Animation
     {
         Texture2D spriteSheet;
-        Vector2 position;
+        public Vector2 position;
         Rectangle currentSpriteRect;
         double frameTimer, frameInterval;
         int currentFrame;
