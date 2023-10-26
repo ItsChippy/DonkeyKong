@@ -90,19 +90,6 @@ namespace DonkeyKong
                 game1.Restart();
                 game1.currentState = GameState.StartMenu;
             }
-            if (hasLost)
-            {
-                return;
-            }
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            for (int platformsWithSprings = 8; platformsWithSprings < 17; platformsWithSprings++) 
-            {
-                for (int firstSpringTile = 5; firstSpringTile < 17; firstSpringTile++) 
-                {
-                    tileMap[platformsWithSprings, firstSpringTile].position.Y = tileMap[platformsWithSprings, 16].position.Y;
-                }
-            }
             if (timer >= 3)
             {
                 player.position = pauline.position;
@@ -178,10 +165,13 @@ namespace DonkeyKong
             {
                 game1.gameOverScreen.DrawLose(spriteBatch);
             }
-            game1.gameOverScreen.DrawWin(spriteBatch);
-            spriteBatch.Draw(player.texture, player.position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
-            pauline.Draw(spriteBatch);
-            game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipVertically, Color.White);
+            else
+            {
+                game1.gameOverScreen.DrawWin(spriteBatch);
+                spriteBatch.Draw(player.texture, player.position, null, Color.White, 0, Vector2.Zero, 2.35f, SpriteEffects.None, 0);
+                pauline.Draw(spriteBatch);
+                game1.donkeyKongAnimation.Draw(spriteBatch, 2.35f, SpriteEffects.FlipVertically, Color.White);
+            }
 
         }
 
